@@ -1,0 +1,68 @@
+{
+    "name": "laraarabdev/laravel-turbo-tags",
+    "description": "Enterprise-grade tagging & taxonomy framework for Laravel with translations, hierarchies, scoped visibility & caching",
+    "keywords": [
+        "laravel",
+        "tags",
+        "tagging",
+        "taxonomy",
+        "translatable",
+        "hierarchical-tags",
+        "polymorphic"
+    ],
+    "homepage": "https://github.com/LaraArabDev/LaravelTurboTags",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "LaraArabDev",
+            "email": "dev@laraarab.dev",
+            "homepage": "https://github.com/LaraArabDev"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0|^12.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "spatie/laravel-translatable": "^6.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^9.0|^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaraArabDev\\TurboTags\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaraArabDev\\TurboTags\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint",
+        "format-test": "vendor/bin/pint --test"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaraArabDev\\TurboTags\\TurboTagsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
