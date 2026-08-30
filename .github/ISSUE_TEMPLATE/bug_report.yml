@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in Laravel TurboTags
+description: Report a bug in :package_name
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -12,7 +12,7 @@ body:
     id: package-version
     attributes:
       label: Package Version
-      description: What version of laravel-turbo-tags are you using?
+      description: What version of :package_slug are you using?
       placeholder: "1.0.0"
     validations:
       required: true

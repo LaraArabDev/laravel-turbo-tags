@@ -1,8 +1,8 @@
 <?php
 
-namespace LaraArabDev\TurboTags\Tests;
+namespace LaraArabDev\:package_namespace\Tests;
 
-use LaraArabDev\TurboTags\TurboTagsServiceProvider;
+use LaraArabDev\:package_namespace\:package_nameServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -10,7 +10,7 @@ abstract class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            TurboTagsServiceProvider::class,
+            :package_nameServiceProvider::class,
         ];
     }
 

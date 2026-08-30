@@ -18,6 +18,8 @@
 - [ ] PHPStan passes at max level (`composer analyse`)
 - [ ] I have updated the documentation accordingly
 - [ ] I have added an entry to CHANGELOG.md (if applicable)
+- [ ] My commit messages follow [Conventional Commits](https://www.conventionalcommits.org/)
+- [ ] My branch name follows the `type/description` convention
 
 ## Testing
 

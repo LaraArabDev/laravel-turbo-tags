@@ -1,129 +1,162 @@
-# Laravel TurboTags
+<p align="center">
+    <img src="art/banner.svg" alt=":package_name Banner" style="width: 100%; max-width: 800px;">
+</p>
 
-[![Tests](https://github.com/LaraArabDev/LaravelTurboTags/actions/workflows/tests.yml/badge.svg)](https://github.com/LaraArabDev/LaravelTurboTags/actions/workflows/tests.yml)
-[![Static Analysis](https://github.com/LaraArabDev/LaravelTurboTags/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/LaraArabDev/LaravelTurboTags/actions/workflows/static-analysis.yml)
-[![Code Style](https://github.com/LaraArabDev/LaravelTurboTags/actions/workflows/code-style.yml/badge.svg)](https://github.com/LaraArabDev/LaravelTurboTags/actions/workflows/code-style.yml)
+<h1 align="center">:package_name</h1>
 
-**Enterprise-grade, high-performance tagging & taxonomy framework for Laravel.**
+<p align="center">
+    <strong>:package_description</strong>
+</p>
 
-TurboTags is a lightweight yet feature-rich tagging and taxonomy framework for Laravel. Built as a modern replacement for basic tagging solutions, TurboTags provides multi-locale translations, hierarchical parent-child tags, scoped visibility (Global, Team, and Personal/Jira-style tags), multiple tag types per model, polymorphic relationships with custom pivot payloads, and optimized caching engines.
+<p align="center">
+    <a href="https://packagist.org/packages/laraarabdev/:package_slug"><img src="https://img.shields.io/packagist/v/laraarabdev/:package_slug.svg?style=flat-square" alt="Latest Version"></a>
+    <a href="https://packagist.org/packages/laraarabdev/:package_slug"><img src="https://img.shields.io/packagist/dt/laraarabdev/:package_slug.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/laraarabdev/:package_slug"><img src="https://img.shields.io/packagist/l/laraarabdev/:package_slug.svg?style=flat-square" alt="License"></a>
+    <a href="https://packagist.org/packages/laraarabdev/:package_slug"><img src="https://img.shields.io/packagist/php-v/laraarabdev/:package_slug.svg?style=flat-square" alt="PHP"></a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-11.x%20%7C%2012.x-red?style=flat-square" alt="Laravel"></a>
+</p>
 
-## Features
+<p align="center">
+    <a href="https://github.com/LaraArabDev/:package_repo/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/:package_repo/tests.yml?branch=main&label=tests&style=flat-square" alt="Tests"></a>
+    <a href="https://codecov.io/gh/LaraArabDev/:package_repo"><img src="https://img.shields.io/codecov/c/github/LaraArabDev/:package_repo?style=flat-square" alt="codecov"></a>
+    <a href="https://github.com/LaraArabDev/:package_repo/actions/workflows/static-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/:package_repo/static-analysis.yml?branch=main&label=phpstan&style=flat-square" alt="Static Analysis"></a>
+    <a href="https://github.com/LaraArabDev/:package_repo/actions/workflows/security.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/:package_repo/security.yml?branch=main&label=security&style=flat-square" alt="Security Audit"></a>
+    <a href="https://github.com/LaraArabDev/:package_repo/actions/workflows/mutation-testing.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/:package_repo/mutation-testing.yml?branch=main&label=infection&style=flat-square" alt="Mutation Testing"></a>
+    <a href="https://github.com/LaraArabDev/:package_repo/actions/workflows/code-style.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/:package_repo/code-style.yml?branch=main&label=pint&style=flat-square" alt="Code Style"></a>
+</p>
 
-- **Polymorphic Tagging** — Attach tags to any Eloquent model via the `HasTurboTags` trait
-- **Multi-Locale Translations** — Translatable tag names, descriptions, and metadata via Spatie Translatable
-- **Hierarchical Taxonomies** — Unlimited parent-child nested tag structures with tree scopes
-- **Scoped Visibility** — Global, Team, and Personal (Jira-style) tag ownership
-- **Multiple Tag Types** — Categorize tags per model (e.g., `specification` vs `marketing` tags)
-- **Custom Pivot Payload** — `attached_by_id`, `tag_order`, and `metadata` on the pivot table
-- **Localized Slugs** — Auto-generated per-locale slugs with history tracking and auto-redirects
-- **Ordering & Sorting** — Pivot-level and global tag ordering with drag-and-drop support
-- **Performance Caching** — Redis/Memcached cache layer with auto-invalidation
-- **Denormalized Counters** — Built-in `usage_count` to avoid expensive COUNT queries
-- **Batch Operations** — Optimized bulk attach/detach/sync
+<p align="center">
+    :package_description<br>
+    PHP 8.2 – 8.4 · Laravel 11 / 12
+</p>
 
-## Installation
+<p align="center">
+    <b><a href="https://github.com/LaraArabDev">LaraArabDev</a></b> — We build, develop, empower, and contribute. An Arab open-source community crafting production-grade Laravel packages.<br>
+    <b><a href="https://github.com/LaraArabDev">LaraArabDev</a></b> — نبني، نطوّر، نُمكّن، ونُساهم. مجتمع عربي مفتوح المصدر يصنع حزم Laravel احترافية وجاهزة للإنتاج.
+</p>
 
-You can install the package via Composer:
+<p align="center">
+    <a href="#-quick-start">Quick Start</a> ·
+    <a href="#-features">Features</a> ·
+    <a href="#-configuration">Configuration</a> ·
+    <a href="#-testing">Testing</a> ·
+    <a href="#-changelog">Changelog</a>
+</p>
+
+---
+
+## What is :package_name?
+
+<!--
+TODO: Write a compelling description of what your package does and why someone should use it.
+-->
+
+**:package_name** provides ... for your Laravel application.
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-composer require laraarabdev/laravel-turbo-tags
+composer require laraarabdev/:package_slug
+php artisan vendor:publish --tag=":package_slug-config"
 ```
 
-Publish and run the migrations:
+| Requirement | Version |
+| --- | --- |
+| PHP | 8.2, 8.3, or 8.4 |
+| Laravel | 11 or 12 |
 
-```bash
-php artisan vendor:publish --tag="turbo-tags-migrations"
-php artisan migrate
-```
+---
 
-Optionally publish the config file:
+## 📦 Features
 
-```bash
-php artisan vendor:publish --tag="turbo-tags-config"
-```
+<!--
+TODO: Document your package features here.
+-->
 
-## Quick Start
+- Feature one
+- Feature two
+- Feature three
 
-### Add the trait to your model
+---
+
+## ⚙️ Configuration
+
+After publishing the config file, you can customize the behavior:
 
 ```php
-use LaraArabDev\TurboTags\Concerns\HasTurboTags;
+// config/:package_slug.php
 
-class Post extends Model
-{
-    use HasTurboTags;
-}
+return [
+    // ...
+];
 ```
 
-### Create and attach tags
+---
 
-```php
-use LaraArabDev\TurboTags\Models\TurboTag;
-
-// Create a translatable tag
-$tag = TurboTag::create([
-    'name' => ['en' => 'Laravel', 'ar' => 'لارافيل'],
-    'description' => ['en' => 'PHP Framework', 'ar' => 'إطار عمل PHP'],
-    'type' => 'technology',
-]);
-
-// Attach tags to a model
-$post->attachTags(['Laravel', 'PHP'], 'technology');
-
-// Query by tag type
-$post->tagsOfType('technology');
-
-// Query models by tags
-Post::withAnyTags(['Laravel', 'PHP'])->get();
-Post::withAllTags(['Laravel', 'Tutorial'])->get();
-```
-
-### Scoped tags
-
-```php
-TurboTag::global()->get();
-TurboTag::forTeam($team)->get();
-TurboTag::personal($user)->get();
-TurboTag::availableFor($user, $team)->get();
-```
-
-### Hierarchical tags
-
-```php
-$tag->children;
-$tag->parent;
-$tag->ancestors();
-$tag->descendants();
-$tag->breadcrumbString(' > '); // "Technology > PHP > Laravel"
-```
-
-## Testing
+## 🧪 Testing
 
 ```bash
 composer test
 ```
 
-## Static Analysis
+Run the full test suite with code coverage:
+
+```bash
+composer test-coverage
+```
+
+Run static analysis:
 
 ```bash
 composer analyse
 ```
 
-## Code Style
+Run code style checks:
+
+```bash
+composer format-test
+```
+
+Fix code style:
 
 ```bash
 composer format
 ```
 
-## Changelog
+---
+
+## 📝 Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
+## 🤝 Contributing
 
-Please see [CONTRIBUTING](.github/PULL_REQUEST_TEMPLATE.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
-## License
+### Commit Convention
+
+This project follows [Conventional Commits](https://www.conventionalcommits.org/). All commit messages and PR titles must follow this format:
+
+```
+type(scope): description
+```
+
+**Allowed types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`, `hotfix`
+
+**Branch naming:** `type/short-description` (e.g., `feat/add-caching`, `fix/slug-generation`)
+
+### Security Vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## 📄 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+---
+
+<p align="center">
+    <sub>Built with ❤️ by <a href="https://github.com/LaraArabDev">LaraArabDev</a></sub>
+</p>

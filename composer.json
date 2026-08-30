@@ -1,16 +1,12 @@
 {
-    "name": "laraarabdev/laravel-turbo-tags",
-    "description": "Enterprise-grade tagging & taxonomy framework for Laravel with translations, hierarchies, scoped visibility & caching",
+    "name": "laraarabdev/:package_slug",
+    "description": ":package_description",
     "keywords": [
         "laravel",
-        "tags",
-        "tagging",
-        "taxonomy",
-        "translatable",
-        "hierarchical-tags",
-        "polymorphic"
+        "laraarabdev",
+        ":package_slug"
     ],
-    "homepage": "https://github.com/LaraArabDev/LaravelTurboTags",
+    "homepage": "https://github.com/LaraArabDev/:package_repo",
     "license": "MIT",
     "authors": [
         {
@@ -23,8 +19,7 @@
         "php": "^8.2",
         "illuminate/contracts": "^11.0|^12.0",
         "illuminate/database": "^11.0|^12.0",
-        "illuminate/support": "^11.0|^12.0",
-        "spatie/laravel-translatable": "^6.0"
+        "illuminate/support": "^11.0|^12.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.0",
@@ -35,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "LaraArabDev\\TurboTags\\": "src/"
+            "LaraArabDev\\:package_namespace\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LaraArabDev\\TurboTags\\Tests\\": "tests/"
+            "LaraArabDev\\:package_namespace\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -59,7 +54,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LaraArabDev\\TurboTags\\TurboTagsServiceProvider"
+                "LaraArabDev\\:package_namespace\\:package_nameServiceProvider"
             ]
         }
     },

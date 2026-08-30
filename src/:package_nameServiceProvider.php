@@ -1,16 +1,16 @@
 <?php
 
-namespace LaraArabDev\TurboTags;
+namespace LaraArabDev\:package_namespace;
 
 use Illuminate\Support\ServiceProvider;
 
-class TurboTagsServiceProvider extends ServiceProvider
+class :package_nameServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/turbo-tags.php',
-            'turbo-tags',
+            __DIR__.'/../config/:package_slug.php',
+            ':package_slug',
         );
     }
 
@@ -18,12 +18,12 @@ class TurboTagsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/turbo-tags.php' => config_path('turbo-tags.php'),
-            ], 'turbo-tags-config');
+                __DIR__.'/../config/:package_slug.php' => config_path(':package_slug.php'),
+            ], ':package_slug-config');
 
             $this->publishesMigrations([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
-            ], 'turbo-tags-migrations');
+            ], ':package_slug-migrations');
         }
     }
 }
