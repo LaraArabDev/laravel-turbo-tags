@@ -133,7 +133,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## 🤝 Contributing
 
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details. All contributions must meet our [acceptance criteria](.github/CONTRIBUTING.md#acceptance-criteria).
 
 ### Commit Convention
 
@@ -147,9 +147,20 @@ type(scope): description
 
 **Branch naming:** `type/short-description` (e.g., `feat/add-caching`, `fix/slug-generation`)
 
-### Security Vulnerabilities
+## 🔒 Security
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Please review [our security policy](SECURITY.md) on how to report security vulnerabilities. **Do not** open a public issue.
+
+## 📋 Policies
+
+| Document | Description |
+| --- | --- |
+| [Code of Conduct](.github/CODE_OF_CONDUCT.md) | Community standards and expectations |
+| [Contributing Guide](.github/CONTRIBUTING.md) | How to contribute, conventions, and acceptance criteria |
+| [Security Policy](SECURITY.md) | How to report vulnerabilities responsibly |
+| [Support](.github/SUPPORT.md) | How to get help |
+| [Governance](.github/GOVERNANCE.md) | Decision-making process and roles |
+| [Code Owners](.github/CODEOWNERS) | Required reviewers by area |
 
 ## 📄 License
 

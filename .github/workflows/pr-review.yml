@@ -1,0 +1,68 @@
+name: PR Review Checklist
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+permissions: read-all
+
+jobs:
+  checklist:
+    name: Review Checklist
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Post review checklist
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            const hasBreaking = /breaking change/i.test(body) || /\bBREAKING\b/.test(context.payload.pull_request.title);
+
+            let checklist = `## Reviewer Checklist
+
+            > Auto-generated for every PR. Reviewers: please check each item before approving.
+
+            ### Code Quality
+            - [ ] Code is readable and follows existing patterns
+            - [ ] No unnecessary complexity or over-engineering
+            - [ ] No hardcoded values that should be configurable
+            - [ ] Error handling is appropriate
+
+            ### Testing
+            - [ ] New/changed code has adequate test coverage
+            - [ ] Edge cases are tested
+            - [ ] Tests are deterministic (no flaky tests)
+
+            ### Documentation
+            - [ ] Public API changes are documented
+            - [ ] CHANGELOG is updated (if applicable)
+            - [ ] Inline comments explain non-obvious logic
+
+            ### Security
+            - [ ] No sensitive data exposed (keys, tokens, passwords)
+            - [ ] User input is validated/sanitized
+            - [ ] No SQL injection or XSS vectors introduced
+
+            ### Performance
+            - [ ] No N+1 query issues introduced
+            - [ ] No unnecessary database calls
+            - [ ] Caching implications considered`;
+
+            if (hasBreaking) {
+              checklist += `
+
+            ### Breaking Changes
+            - [ ] Breaking change is justified and necessary
+            - [ ] Migration path is documented
+            - [ ] CHANGELOG clearly marks the breaking change
+            - [ ] Major version bump will be triggered`;
+            }
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: checklist,
+            });

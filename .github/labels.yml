@@ -1,0 +1,109 @@
+# Type labels
+- name: bug
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: enhancement
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: documentation
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+- name: question
+  color: "d876e3"
+  description: "Further information is requested"
+
+# Priority labels
+- name: "priority: critical"
+  color: "b60205"
+  description: "Must be fixed immediately"
+
+- name: "priority: high"
+  color: "d93f0b"
+  description: "Should be fixed soon"
+
+- name: "priority: medium"
+  color: "fbca04"
+  description: "Normal priority"
+
+- name: "priority: low"
+  color: "0e8a16"
+  description: "Nice to have"
+
+# Status labels
+- name: "status: needs triage"
+  color: "ededed"
+  description: "Needs initial review and classification"
+
+- name: "status: confirmed"
+  color: "c5def5"
+  description: "Issue has been confirmed and is ready to work on"
+
+- name: "status: in progress"
+  color: "0052cc"
+  description: "Currently being worked on"
+
+- name: "status: needs review"
+  color: "fbca04"
+  description: "Ready for code review"
+
+- name: "status: blocked"
+  color: "b60205"
+  description: "Cannot proceed due to external dependency"
+
+# Category labels
+- name: breaking-change
+  color: "e11d48"
+  description: "Introduces a breaking change"
+
+- name: security
+  color: "d73a4a"
+  description: "Security-related issue or fix"
+
+- name: performance
+  color: "f9d0c4"
+  description: "Performance improvement"
+
+- name: refactor
+  color: "c2e0c6"
+  description: "Code refactoring (no functional change)"
+
+- name: testing
+  color: "bfd4f2"
+  description: "Related to tests"
+
+- name: dependencies
+  color: "0366d6"
+  description: "Dependency updates"
+
+- name: ci
+  color: "e4e669"
+  description: "CI/CD related"
+
+# Contributor labels
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+# Workflow labels
+- name: duplicate
+  color: "cfd3d7"
+  description: "This issue or PR already exists"
+
+- name: wontfix
+  color: "ffffff"
+  description: "This will not be worked on"
+
+- name: stale
+  color: "ededed"
+  description: "Inactive for 30+ days"
+
+- name: pinned
+  color: "006b75"
+  description: "Will not be auto-closed"
