@@ -1,8 +1,28 @@
+# Code Owners | مالكو الكود
+# =============================================
+# These owners will be automatically requested
+# for review when someone opens a pull request.
+#
+# هؤلاء المالكون سيُطلب منهم تلقائياً
+# المراجعة عند فتح طلب سحب.
+# =============================================
+
 # Default owners for everything in the repo
+# المالكون الافتراضيون لكل شيء في المستودع
 * @LaraArabDev
 
 # CI/CD workflows require maintainer review
+# سير عمل CI/CD يتطلب مراجعة المشرفين
 .github/ @LaraArabDev
 
 # Config changes require maintainer review
+# تغييرات الإعدادات تتطلب مراجعة المشرفين
 config/ @LaraArabDev
+
+# Database migrations require maintainer review
+# ترحيلات قاعدة البيانات تتطلب مراجعة المشرفين
+database/ @LaraArabDev
+
+# Security policy changes require maintainer review
+# تغييرات سياسة الأمان تتطلب مراجعة المشرفين
+SECURITY.md @LaraArabDev

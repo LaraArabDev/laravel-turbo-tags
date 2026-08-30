@@ -1,4 +1,7 @@
-# Contributing to :package_name
+# Contributing to :package_name | المساهمة في :package_name
+
+<details open>
+<summary><strong>English</strong></summary>
 
 Thank you for considering contributing to **:package_name**! We welcome contributions from the community.
 
@@ -150,3 +153,167 @@ Use the [feature request template](https://github.com/LaraArabDev/:package_repo/
 ## Security
 
 See our [Security Policy](../SECURITY.md) for reporting vulnerabilities.
+
+</details>
+
+---
+
+<details>
+<summary><strong>العربية</strong></summary>
+
+<div dir="rtl">
+
+شكراً لتفكيرك في المساهمة في **:package_name**! نرحب بالمساهمات من المجتمع.
+
+يرجى قراءة [ميثاق قواعد السلوك](CODE_OF_CONDUCT.md) قبل المشاركة.
+
+## إعداد بيئة التطوير
+
+1. انسخ المستودع (Fork)
+2. استنسخ نسختك: `git clone git@github.com:your-username/:package_repo.git`
+3. ثبّت المتطلبات: `composer install`
+4. أنشئ فرعاً جديداً: `git checkout -b feat/your-feature`
+5. شغّل الاختبارات للتأكد من أن كل شيء يعمل: `composer test`
+
+## تسمية الفروع
+
+يجب أن تتبع جميع الفروع هذا النمط:
+
+```
+type/short-description
+```
+
+**الأنواع المسموحة:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`, `hotfix`, `release`
+
+**أمثلة:**
+- `feat/add-caching`
+- `fix/null-pointer`
+- `docs/update-readme`
+
+## رسائل الـ Commit
+
+يتبع هذا المشروع معيار [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+type(scope): وصف قصير
+
+نص اختياري مع مزيد من التفاصيل.
+```
+
+**أمثلة:**
+- `feat: add tag caching support`
+- `fix(model): resolve duplicate slug generation`
+- `docs: update installation instructions`
+- `test: add coverage for edge cases`
+
+## عنوان طلب السحب (PR Title)
+
+يجب أن يتبع عنوان PR نفس صيغة Conventional Commits. يتم فرض هذا تلقائياً بواسطة CI.
+
+## معايير القبول
+
+يجب أن يستوفي كل PR **جميع** المعايير التالية قبل دمجه:
+
+### المطلوب (جميع PRs)
+
+- [ ] **نجاح جميع فحوصات CI** — الاختبارات، PHPStan، Pint، تدقيق الأمان
+- [ ] **اسم الفرع** يتبع صيغة `type/short-description`
+- [ ] **عنوان PR** يتبع صيغة Conventional Commits (`type: description`)
+- [ ] **جميع الـ commits** تتبع صيغة Conventional Commits
+- [ ] **لا توجد تعارضات دمج** مع `main`
+- [ ] **قائمة المراجعة** تمت معالجتها (تُنشر تلقائياً على كل PR)
+
+### تغييرات الكود
+
+- [ ] **الاختبارات مضمّنة** — السلوك الجديد/المعدّل له تغطية اختبار مناسبة
+- [ ] **لا انخفاض في التغطية** — يجب أن تبقى التغطية كما هي أو تتحسن
+- [ ] **PHPStan ينجح** عند أعلى مستوى بدون إضافات baseline
+- [ ] **نمط الكود** يجتاز Laravel Pint (PSR-12)
+- [ ] **لا استعلامات N+1** جديدة
+- [ ] **لا قيم ثابتة** يجب أن تكون قابلة للتكوين
+- [ ] **لا بيانات حساسة** مكشوفة (مفاتيح، رموز، بيانات اعتماد)
+
+### الميزات الجديدة
+
+- [ ] **الميزة قابلة للتكوين** — يمكن تفعيلها/تعطيلها أو تخصيصها عبر config
+- [ ] **تحديث README** بأمثلة الاستخدام
+- [ ] **تحديث CHANGELOG** تحت `[Unreleased]`
+- [ ] **تضمين migration** إذا كانت هناك تغييرات في المخطط
+
+### إصلاح الأخطاء
+
+- [ ] **اختبار انحدار** مضمّن يعيد إنتاج الخطأ
+- [ ] **معالجة السبب الجذري** وليس الأعراض فقط
+- [ ] **تحديث CHANGELOG** تحت `[Unreleased]`
+
+### التغييرات الجذرية (Breaking Changes)
+
+- [ ] **مبررة وضرورية** — لا يوجد بديل غير جذري
+- [ ] **مسار الترحيل موثّق** للمستخدمين الحاليين
+- [ ] **CHANGELOG** يحدد التغيير الجذري بوضوح
+- [ ] **الـ Commit/PR** يتضمن `BREAKING CHANGE:` أو `!` في النوع
+- [ ] **سيتم تفعيل رفع النسخة الرئيسية** (Major version bump)
+
+### التوثيق
+
+- [ ] **واجهة API العامة** موثقة في README
+- [ ] **التعليقات المضمّنة** تشرح المنطق غير الواضح
+- [ ] **كتل PHPDoc** على الدوال العامة
+
+## فحوصات الجودة
+
+قبل تقديم PR، تأكد من نجاح جميع الفحوصات محلياً:
+
+```bash
+# تشغيل الاختبارات
+composer test
+
+# تشغيل الاختبارات مع التغطية
+composer test-coverage
+
+# تشغيل التحليل الثابت
+composer analyse
+
+# فحص نمط الكود
+composer format-test
+
+# إصلاح نمط الكود
+composer format
+```
+
+## عملية طلب السحب
+
+1. تأكد من أن فرعك محدّث مع `main`
+2. تحقق من استيفاء جميع معايير القبول
+3. يجب أن تنجح جميع فحوصات CI (14 سير عمل)
+4. عالج قائمة المراجعة المولّدة تلقائياً
+5. يجب أن يوافق مشرف واحد على الأقل
+6. يتم دمج PRs بطريقة squash-merge — عنوان PR يصبح رسالة الـ commit
+
+## عملية المراجعة
+
+- تتم مراجعة PRs خلال **48 ساعة** في أيام العمل
+- قد يطلب المشرفون تعديلات — يرجى معالجتها بسرعة
+- PRs غير النشطة (بدون نشاط لمدة 30 يوماً) تُغلق تلقائياً
+- الإصلاحات البسيطة (أخطاء إملائية، تنسيق) يمكن دمجها بموافقة مشرف واحد
+- التغييرات الكبيرة تتطلب موافقة مشرفَين على الأقل
+
+## نمط الكود
+
+يستخدم هذا المشروع [Laravel Pint](https://laravel.com/docs/pint) مع PSR-12. شغّل `composer format` للإصلاح التلقائي.
+
+## الإبلاغ عن الأخطاء
+
+استخدم [نموذج الإبلاغ عن الأخطاء](https://github.com/LaraArabDev/:package_repo/issues/new?template=bug_report.yml).
+
+## اقتراح الميزات
+
+استخدم [نموذج طلب الميزات](https://github.com/LaraArabDev/:package_repo/issues/new?template=feature_request.yml).
+
+## الأمان
+
+راجع [سياسة الأمان](../SECURITY.md) للإبلاغ عن الثغرات الأمنية.
+
+</div>
+
+</details>

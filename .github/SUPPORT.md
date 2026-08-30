@@ -1,4 +1,7 @@
-# Support
+# Support | الدعم
+
+<details open>
+<summary><strong>English</strong></summary>
 
 ## How to Get Help
 
@@ -35,3 +38,52 @@ Have an idea? [Open a feature request](https://github.com/LaraArabDev/:package_r
 - **Paid support** — This is a free, open-source project maintained by volunteers
 - **Guaranteed response times** — We do our best to respond promptly, but cannot guarantee timelines
 - **Custom development** — For bespoke features, consider contributing a PR or hiring a developer
+
+</details>
+
+---
+
+<details>
+<summary><strong>العربية</strong></summary>
+
+<div dir="rtl">
+
+## كيفية الحصول على المساعدة
+
+إذا كنت بحاجة إلى مساعدة مع **:package_name**، إليك الخيارات المتاحة:
+
+### التوثيق
+
+ابدأ بقراءة [README](../README.md) — يغطي التثبيت والإعداد وحالات الاستخدام الشائعة.
+
+### الإبلاغ عن الأخطاء
+
+إذا وجدت خطأ، يرجى [فتح Issue](https://github.com/LaraArabDev/:package_repo/issues/new?template=bug_report.yml) باستخدام نموذج الإبلاغ عن الأخطاء.
+
+قبل فتح Issue، يرجى:
+1. البحث في [المشاكل الموجودة](https://github.com/LaraArabDev/:package_repo/issues) لتجنب التكرار
+2. التأكد من استخدام أحدث إصدار من الحزمة
+3. التأكد من إمكانية إعادة إنتاج المشكلة
+
+### طلبات الميزات
+
+لديك فكرة؟ [افتح طلب ميزة](https://github.com/LaraArabDev/:package_repo/issues/new?template=feature_request.yml).
+
+### المشاكل الأمنية
+
+**لا تفتح** Issue عامة للثغرات الأمنية. يرجى الاطلاع على [سياسة الأمان](../SECURITY.md).
+
+### المجتمع
+
+- [LaraArabDev على GitHub](https://github.com/LaraArabDev) — جميع حزمنا مفتوحة المصدر
+- [المناقشات](https://github.com/LaraArabDev/:package_repo/discussions) — اطرح أسئلة وشارك أفكارك
+
+## ما لا نقدمه
+
+- **الدعم المدفوع** — هذا مشروع مجاني مفتوح المصدر يُديره متطوعون
+- **أوقات استجابة مضمونة** — نبذل قصارى جهدنا للرد بسرعة، لكن لا نستطيع ضمان مواعيد محددة
+- **التطوير المخصص** — للميزات المخصصة، يمكنك المساهمة بـ PR أو توظيف مطور
+
+</div>
+
+</details>
