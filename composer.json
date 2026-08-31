@@ -1,12 +1,16 @@
 {
-    "name": "laraarabdev/:package_slug",
-    "description": ":package_description",
+    "name": "laraarabdev/laravel-turbo-tags",
+    "description": "A high-performance polymorphic tagging system with translation support for Laravel",
     "keywords": [
         "laravel",
         "laraarabdev",
-        ":package_slug"
+        "tagging",
+        "tags",
+        "polymorphic",
+        "i18n",
+        "multilingual"
     ],
-    "homepage": "https://github.com/LaraArabDev/:package_repo",
+    "homepage": "https://github.com/LaraArabDev/LaravelTurboTags",
     "license": "MIT",
     "authors": [
         {
@@ -26,16 +30,17 @@
         "laravel/pint": "^1.0",
         "orchestra/testbench": "^9.0|^10.0",
         "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-4": {
-            "LaraArabDev\\:package_namespace\\": "src/"
+            "LaraArabDev\\TurboTags\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LaraArabDev\\:package_namespace\\Tests\\": "tests/"
+            "LaraArabDev\\TurboTags\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -54,7 +59,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LaraArabDev\\:package_namespace\\:package_nameServiceProvider"
+                "LaraArabDev\\TurboTags\\TurboTagsServiceProvider"
             ]
         }
     },

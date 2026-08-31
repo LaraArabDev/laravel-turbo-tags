@@ -1,5 +1,5 @@
 <?php
 
-use LaraArabDev\:package_namespace\Tests\TestCase;
+use LaraArabDev\TurboTags\Tests\TestCase;
 
 uses(TestCase::class)->in('Feature');
