@@ -5,7 +5,7 @@
 
 ## How to Get Help
 
-If you need help with **TurboTags**, here are your options:
+If you need help with **:package_name**, here are your options:
 
 ### Documentation
 
@@ -13,16 +13,16 @@ Start with the [README](../README.md) — it covers installation, configuration,
 
 ### Bug Reports
 
-If you've found a bug, please [open an issue](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=bug_report.yml) using the bug report template.
+If you've found a bug, please [open an issue](https://github.com/LaraArabDev/:package_repo/issues/new?template=bug_report.yml) using the bug report template.
 
 Before opening an issue, please:
-1. Search [existing issues](https://github.com/LaraArabDev/LaravelTurboTags/issues) to avoid duplicates
+1. Search [existing issues](https://github.com/LaraArabDev/:package_repo/issues) to avoid duplicates
 2. Ensure you're using the latest version of the package
 3. Confirm the issue is reproducible
 
 ### Feature Requests
 
-Have an idea? [Open a feature request](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=feature_request.yml).
+Have an idea? [Open a feature request](https://github.com/LaraArabDev/:package_repo/issues/new?template=feature_request.yml).
 
 ### Security Issues
 
@@ -31,7 +31,7 @@ Have an idea? [Open a feature request](https://github.com/LaraArabDev/LaravelTur
 ### Community
 
 - [LaraArabDev GitHub](https://github.com/LaraArabDev) — All our open-source packages
-- [Discussions](https://github.com/LaraArabDev/LaravelTurboTags/discussions) — Ask questions and share ideas
+- [Discussions](https://github.com/LaraArabDev/:package_repo/discussions) — Ask questions and share ideas
 
 ## What We Don't Provide
 
@@ -50,7 +50,7 @@ Have an idea? [Open a feature request](https://github.com/LaraArabDev/LaravelTur
 
 ## كيفية الحصول على المساعدة
 
-إذا كنت بحاجة إلى مساعدة مع **TurboTags**، إليك الخيارات المتاحة:
+إذا كنت بحاجة إلى مساعدة مع **:package_name**، إليك الخيارات المتاحة:
 
 ### التوثيق
 
@@ -58,16 +58,16 @@ Have an idea? [Open a feature request](https://github.com/LaraArabDev/LaravelTur
 
 ### الإبلاغ عن الأخطاء
 
-إذا وجدت خطأ، يرجى [فتح Issue](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=bug_report.yml) باستخدام نموذج الإبلاغ عن الأخطاء.
+إذا وجدت خطأ، يرجى [فتح Issue](https://github.com/LaraArabDev/:package_repo/issues/new?template=bug_report.yml) باستخدام نموذج الإبلاغ عن الأخطاء.
 
 قبل فتح Issue، يرجى:
-1. البحث في [المشاكل الموجودة](https://github.com/LaraArabDev/LaravelTurboTags/issues) لتجنب التكرار
+1. البحث في [المشاكل الموجودة](https://github.com/LaraArabDev/:package_repo/issues) لتجنب التكرار
 2. التأكد من استخدام أحدث إصدار من الحزمة
 3. التأكد من إمكانية إعادة إنتاج المشكلة
 
 ### طلبات الميزات
 
-لديك فكرة؟ [افتح طلب ميزة](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=feature_request.yml).
+لديك فكرة؟ [افتح طلب ميزة](https://github.com/LaraArabDev/:package_repo/issues/new?template=feature_request.yml).
 
 ### المشاكل الأمنية
 
@@ -76,7 +76,7 @@ Have an idea? [Open a feature request](https://github.com/LaraArabDev/LaravelTur
 ### المجتمع
 
 - [LaraArabDev على GitHub](https://github.com/LaraArabDev) — جميع حزمنا مفتوحة المصدر
-- [المناقشات](https://github.com/LaraArabDev/LaravelTurboTags/discussions) — اطرح أسئلة وشارك أفكارك
+- [المناقشات](https://github.com/LaraArabDev/:package_repo/discussions) — اطرح أسئلة وشارك أفكارك
 
 ## ما لا نقدمه
 

@@ -5,7 +5,7 @@
 
 ## Project Governance
 
-**TurboTags** is maintained by the [LaraArabDev](https://github.com/LaraArabDev) community.
+**:package_name** is maintained by the [LaraArabDev](https://github.com/LaraArabDev) community.
 
 ### Roles
 
@@ -57,7 +57,7 @@ Trusted contributors who regularly provide high-quality reviews may be granted r
 
 ## حوكمة المشروع
 
-**TurboTags** يُدار بواسطة مجتمع [LaraArabDev](https://github.com/LaraArabDev).
+**:package_name** يُدار بواسطة مجتمع [LaraArabDev](https://github.com/LaraArabDev).
 
 ### الأدوار
 

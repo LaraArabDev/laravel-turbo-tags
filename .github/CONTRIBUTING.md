@@ -1,16 +1,16 @@
-# Contributing to TurboTags | المساهمة في TurboTags
+# Contributing to :package_name | المساهمة في :package_name
 
 <details open>
 <summary><strong>English</strong></summary>
 
-Thank you for considering contributing to **TurboTags**! We welcome contributions from the community.
+Thank you for considering contributing to **:package_name**! We welcome contributions from the community.
 
 Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
 
 ## Development Setup
 
 1. Fork the repository
-2. Clone your fork: `git clone git@github.com:your-username/LaravelTurboTags.git`
+2. Clone your fork: `git clone git@github.com:your-username/:package_repo.git`
 3. Install dependencies: `composer install`
 4. Create a feature branch: `git checkout -b feat/your-feature`
 5. Run the test suite to ensure everything works: `composer test`
@@ -144,11 +144,11 @@ This project uses [Laravel Pint](https://laravel.com/docs/pint) with PSR-12. Run
 
 ## Reporting Bugs
 
-Use the [bug report template](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=bug_report.yml).
+Use the [bug report template](https://github.com/LaraArabDev/:package_repo/issues/new?template=bug_report.yml).
 
 ## Suggesting Features
 
-Use the [feature request template](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=feature_request.yml).
+Use the [feature request template](https://github.com/LaraArabDev/:package_repo/issues/new?template=feature_request.yml).
 
 ## Security
 
@@ -163,14 +163,14 @@ See our [Security Policy](../SECURITY.md) for reporting vulnerabilities.
 
 <div dir="rtl">
 
-شكراً لتفكيرك في المساهمة في **TurboTags**! نرحب بالمساهمات من المجتمع.
+شكراً لتفكيرك في المساهمة في **:package_name**! نرحب بالمساهمات من المجتمع.
 
 يرجى قراءة [ميثاق قواعد السلوك](CODE_OF_CONDUCT.md) قبل المشاركة.
 
 ## إعداد بيئة التطوير
 
 1. انسخ المستودع (Fork)
-2. استنسخ نسختك: `git clone git@github.com:your-username/LaravelTurboTags.git`
+2. استنسخ نسختك: `git clone git@github.com:your-username/:package_repo.git`
 3. ثبّت المتطلبات: `composer install`
 4. أنشئ فرعاً جديداً: `git checkout -b feat/your-feature`
 5. شغّل الاختبارات للتأكد من أن كل شيء يعمل: `composer test`
@@ -304,11 +304,11 @@ composer format
 
 ## الإبلاغ عن الأخطاء
 
-استخدم [نموذج الإبلاغ عن الأخطاء](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=bug_report.yml).
+استخدم [نموذج الإبلاغ عن الأخطاء](https://github.com/LaraArabDev/:package_repo/issues/new?template=bug_report.yml).
 
 ## اقتراح الميزات
 
-استخدم [نموذج طلب الميزات](https://github.com/LaraArabDev/LaravelTurboTags/issues/new?template=feature_request.yml).
+استخدم [نموذج طلب الميزات](https://github.com/LaraArabDev/:package_repo/issues/new?template=feature_request.yml).
 
 ## الأمان
 
