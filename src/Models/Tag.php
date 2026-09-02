@@ -13,9 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+use LaraArabDev\TurboTags\Concerns\HasReporting;
 use LaraArabDev\TurboTags\Concerns\HasSlug;
 use LaraArabDev\TurboTags\Concerns\HasTranslatableName;
 use LaraArabDev\TurboTags\TagCache;
@@ -43,6 +42,7 @@ use LaraArabDev\TurboTags\TagCache;
  */
 class Tag extends Model
 {
+    use HasReporting;
     use HasSlug;
     use HasTranslatableName;
     use SoftDeletes;
@@ -252,89 +252,6 @@ class Tag extends Model
         TagCache::put($cacheKey, $tags);
 
         return $tags;
-    }
-
-    /**
-     * Get the most popular tags ordered by usage count.
-     *
-     * Each returned tag has a `taggables_count` attribute.
-     *
-     * @param  int  $limit  Maximum number of tags to return.
-     * @param  string|BackedEnum|null  $type  Optional tag type to filter by.
-     * @return Collection<int, static>
-     */
-    public static function mostPopular(int $limit = 10, string|BackedEnum|null $type = null): Collection
-    {
-        $type = self::resolveType($type);
-        $tagsTable = self::resolveTagsTable();
-        $taggablesTable = self::resolveTaggablesTable();
-
-        return static::query()
-            ->select("{$tagsTable}.*")
-            ->selectSub(
-                DB::table($taggablesTable)->selectRaw('count(*)')->whereColumn('tag_id', "{$tagsTable}.id"),
-                'taggables_count',
-            )
-            ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
-            ->orderByDesc('taggables_count')
-            ->limit($limit)
-            ->get();
-    }
-
-    /**
-     * Get the most recently created tags.
-     *
-     * @param  int  $limit  Maximum number of tags to return.
-     * @param  string|BackedEnum|null  $type  Optional tag type to filter by.
-     * @return Collection<int, static>
-     */
-    public static function recent(int $limit = 10, string|BackedEnum|null $type = null): Collection
-    {
-        $type = self::resolveType($type);
-
-        return static::query()
-            ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
-            ->latest()
-            ->limit($limit)
-            ->get();
-    }
-
-    /**
-     * Get the most popular tags based on recent usage within a time window.
-     *
-     * Only counts tagging activity from the last N days. Each returned tag
-     * has a `taggables_count` attribute reflecting recent usage only.
-     *
-     * @param  int  $limit  Maximum number of tags to return.
-     * @param  int  $days  Number of days to look back for recent usage.
-     * @param  string|BackedEnum|null  $type  Optional tag type to filter by.
-     * @return Collection<int, static>
-     */
-    public static function recentMostPopular(int $limit = 10, int $days = 30, string|BackedEnum|null $type = null): Collection
-    {
-        $type = self::resolveType($type);
-        $tagsTable = self::resolveTagsTable();
-        $taggablesTable = self::resolveTaggablesTable();
-        $since = Carbon::now()->subDays($days);
-
-        return static::query()
-            ->select("{$tagsTable}.*")
-            ->selectSub(
-                DB::table($taggablesTable)
-                    ->selectRaw('count(*)')
-                    ->whereColumn('tag_id', "{$tagsTable}.id")
-                    ->where('created_at', '>=', $since),
-                'taggables_count',
-            )
-            ->whereExists(
-                fn (QueryBuilder $q) => $q->from($taggablesTable)
-                    ->whereColumn('tag_id', "{$tagsTable}.id")
-                    ->where('created_at', '>=', $since),
-            )
-            ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
-            ->orderByDesc('taggables_count')
-            ->limit($limit)
-            ->get();
     }
 
     /**
