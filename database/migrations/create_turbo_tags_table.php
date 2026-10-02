@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +20,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('type')->nullable()->index();
             $table->integer('order_column')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->nullableMorphs('owner');
             $table->foreignIdFor(Tag::class, 'parent_id')->nullable()->constrained($tagsTable)->nullOnDelete()->index();

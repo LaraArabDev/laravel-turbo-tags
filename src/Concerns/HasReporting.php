@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
  * Adds static methods for retrieving most popular, recent,
  * and trending tags based on taggable pivot data.
  *
+ * @internal Designed for the Tag model only — relies on its resolveType/resolveTagsTable/resolveTaggablesTable methods.
+ *
  * @mixin Model
  */
 trait HasReporting

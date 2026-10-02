@@ -34,9 +34,19 @@ trait HasTags
 
         return $this->morphToMany(
             $this->getTagModel(),
-            'taggable',
+            'taggable', // Morph type — must stay 'taggable' regardless of table name config
             \is_string($table) ? $table : 'taggables',
         )->withTimestamps();
+    }
+
+    /**
+     * Resolve the configured tags table name.
+     */
+    protected function resolveTagsTable(): string
+    {
+        $table = config('laravel-turbo-tags.tables.tags', 'tags');
+
+        return \is_string($table) ? $table : 'tags';
     }
 
     /**
@@ -89,10 +99,12 @@ trait HasTags
             return $this;
         }
 
+        $table = $this->resolveTagsTable();
+
         /** @var list<int> $keepIds */
         $keepIds = $this->tags()
-            ->where(fn (Builder $q) => $q->whereNull('tags.type')->orWhere('tags.type', '!=', $type))
-            ->pluck('tags.id')
+            ->where(fn (Builder $q) => $q->whereNull("{$table}.type")->orWhere("{$table}.type", '!=', $type))
+            ->pluck("{$table}.id")
             ->all();
 
         $this->tags()->sync([...$keepIds, ...$ids]);
@@ -107,16 +119,19 @@ trait HasTags
 
     public function hasTag(mixed $tag, string|BackedEnum|null $type = null, ?string $locale = null): bool
     {
+        $table = $this->resolveTagsTable();
+
         return $this->tags()
-            ->whereIn('tags.id', $this->resolveTagIds($tag, $type, $locale))
+            ->whereIn("{$table}.id", $this->resolveTagIds($tag, $type, $locale))
             ->exists();
     }
 
     public function hasAllTags(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): bool
     {
+        $table = $this->resolveTagsTable();
         $ids = $this->resolveTagIds($tags, $type, $locale);
 
-        return $this->tags()->whereIn('tags.id', $ids)->count() === \count($ids);
+        return $this->tags()->whereIn("{$table}.id", $ids)->count() === \count($ids);
     }
 
     public function hasAnyTags(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): bool
@@ -129,9 +144,10 @@ trait HasTags
      */
     public function scopeWithAllTags(Builder $query, mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): void
     {
+        $table = $this->resolveTagsTable();
         $ids = $this->resolveTagIds($tags, $type, $locale);
 
-        $query->whereHas('tags', fn (Builder $q) => $q->whereIn('tags.id', $ids), '>=', \count($ids));
+        $query->whereHas('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $ids), '>=', \count($ids));
     }
 
     /**
@@ -139,7 +155,9 @@ trait HasTags
      */
     public function scopeWithAnyTags(Builder $query, mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): void
     {
-        $query->whereHas('tags', fn (Builder $q) => $q->whereIn('tags.id', $this->resolveTagIds($tags, $type, $locale)));
+        $table = $this->resolveTagsTable();
+
+        $query->whereHas('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $this->resolveTagIds($tags, $type, $locale)));
     }
 
     /**
@@ -147,7 +165,9 @@ trait HasTags
      */
     public function scopeWithoutTags(Builder $query, mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): void
     {
-        $query->whereDoesntHave('tags', fn (Builder $q) => $q->whereIn('tags.id', $this->resolveTagIds($tags, $type, $locale)));
+        $table = $this->resolveTagsTable();
+
+        $query->whereDoesntHave('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $this->resolveTagIds($tags, $type, $locale)));
     }
 
     /**

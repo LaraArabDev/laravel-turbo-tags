@@ -8,7 +8,8 @@ it('can create a tag', function () {
 
     expect($tag)->toBeInstanceOf(Tag::class)
         ->and($tag->slug)->toBe('laravel')
-        ->and($tag->name)->toBe(['en' => 'Laravel']);
+        ->and($tag->name)->toBe('Laravel')
+        ->and($tag->getTranslations())->toBe(['en' => 'Laravel']);
 });
 
 it('can find or create a tag by name', function () {

@@ -95,9 +95,10 @@ class TagCache
 
         $key = static::key($suffix);
         $store = static::store();
+        $value = $store->get($key);
 
-        if ($store->has($key)) {
-            return $store->get($key);
+        if ($value !== null) {
+            return $value;
         }
 
         $value = $callback();
@@ -202,6 +203,11 @@ class TagCache
     }
 
     /**
+     * Maximum number of tracked keys before an automatic flush-and-reset.
+     */
+    protected static int $maxTrackedKeys = 1000;
+
+    /**
      * Track a cache key for later flushing.
      *
      * @param  string  $suffix  The cache key suffix to track.
@@ -218,10 +224,22 @@ class TagCache
         $tracked = is_array($tracked) ? $tracked : [];
         $fullKey = static::key($suffix);
 
-        if (! in_array($fullKey, $tracked, true)) {
-            $tracked[] = $fullKey;
-            $store->put($trackingKey, $tracked, static::ttl());
+        if (in_array($fullKey, $tracked, true)) {
+            return;
         }
+
+        // Safety valve: flush and reset when tracking list grows too large
+        if (count($tracked) >= static::$maxTrackedKeys) {
+            foreach ($tracked as $key) {
+                if (is_string($key)) {
+                    $store->forget($key);
+                }
+            }
+            $tracked = [];
+        }
+
+        $tracked[] = $fullKey;
+        $store->put($trackingKey, $tracked, static::ttl());
     }
 
     /**

@@ -26,7 +26,7 @@ use LaraArabDev\TurboTags\TagCache;
  * typed categorization, ordering, and metadata storage.
  *
  * @property int $id
- * @property array<string, string> $name
+ * @property string $name Translated name (uses fallback chain). Use getTranslations() for the raw array.
  * @property string $slug
  * @property string|null $type
  * @property int|null $order_column
@@ -38,6 +38,7 @@ use LaraArabDev\TurboTags\TagCache;
  * @property Tag|null $parent
  * @property Collection<int, Tag> $children
  * @property Collection<int, Tag> $childrenRecursive
+ * @property bool $is_active
  * @property Carbon|null $deleted_at
  */
 class Tag extends Model
@@ -48,7 +49,22 @@ class Tag extends Model
     use SoftDeletes;
 
     /** @var list<string> */
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'slug',
+        'type',
+        'order_column',
+        'is_active',
+        'metadata',
+        'owner_type',
+        'owner_id',
+        'parent_id',
+    ];
+
+    /** @var array<string, mixed> */
+    protected $attributes = [
+        'is_active' => true,
+    ];
 
     /**
      * Register model event listeners for hierarchy validation and cache invalidation.
@@ -74,8 +90,10 @@ class Tag extends Model
     protected function casts(): array
     {
         return [
-            'name' => 'array',
+            'name' => 'array', // Write-only cast: getAttribute('name') is overridden by HasTranslatableName
+
             'metadata' => 'array',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -104,13 +122,15 @@ class Tag extends Model
         $cacheKey = 'find.'.md5("{$name}|{$type}|{$locale}");
 
         // Check cache first (returns null when disabled or missing)
-        if (TagCache::has($cacheKey)) {
+        $cached = TagCache::get($cacheKey);
+        if ($cached !== null) {
             /** @var static */
-            return TagCache::get($cacheKey);
+            return $cached;
         }
 
-        // Query database
+        // Query database (only active tags)
         $tag = static::query()
+            ->where('is_active', true)
             ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
             ->where("name->{$locale}", $name)
             ->first();
@@ -146,8 +166,9 @@ class Tag extends Model
         $type = self::resolveType($type);
         $locale = self::resolveLocale($locale);
 
-        // 1 query: batch find all existing tags
+        // 1 query: batch find all existing active tags
         $existing = static::query()
+            ->where('is_active', true)
             ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
             ->whereIn("name->{$locale}", $names)
             ->get()
@@ -243,9 +264,12 @@ class Tag extends Model
             return $cached;
         }
 
+        $escaped = str_replace(['%', '_'], ['\%', '\_'], $search);
+
         $tags = static::query()
+            ->where('is_active', true)
             ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
-            ->where("name->{$locale}", 'like', "%{$search}%")
+            ->where("name->{$locale}", 'like', "%{$escaped}%")
             ->limit($limit)
             ->get();
 
@@ -364,14 +388,15 @@ class Tag extends Model
      */
     protected function hasCircularReference(): bool
     {
-        $current = self::withTrashed()->find($this->parent_id);
-        $depth = 0;
+        $visited = [$this->id];
+        $currentId = $this->parent_id;
 
-        while ($current instanceof self && $depth++ < 100) {
-            if ($current->id === $this->id) {
+        while ($currentId !== null && count($visited) < 100) {
+            if (in_array($currentId, $visited, true)) {
                 return true;
             }
-            $current = self::withTrashed()->find($current->parent_id);
+            $visited[] = $currentId;
+            $currentId = self::withTrashed()->where('id', $currentId)->value('parent_id');
         }
 
         return false;
@@ -454,8 +479,9 @@ class Tag extends Model
     public function scopeContaining(Builder $query, string $search, ?string $locale = null): void
     {
         $locale = self::resolveLocale($locale);
+        $escaped = str_replace(['%', '_'], ['\%', '\_'], $search);
 
-        $query->where("name->{$locale}", 'like', "%{$search}%");
+        $query->where("name->{$locale}", 'like', "%{$escaped}%");
     }
 
     /**
@@ -467,6 +493,26 @@ class Tag extends Model
     public function scopeOrdered(Builder $query, string $direction = 'asc'): void
     {
         $query->orderBy('order_column', $direction);
+    }
+
+    /**
+     * Scope query to only active tags.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
+    }
+
+    /**
+     * Scope query to only inactive tags.
+     *
+     * @param  Builder<static>  $query
+     */
+    public function scopeInactive(Builder $query): void
+    {
+        $query->where('is_active', false);
     }
 
     /**

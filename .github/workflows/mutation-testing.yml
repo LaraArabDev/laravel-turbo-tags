@@ -6,29 +6,29 @@ on:
   pull_request:
     branches: [main]
 
-permissions: read-all
-
 jobs:
   infection:
     name: Infection PHP (Mutation Testing)
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@v4
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@b604ade2a87db23f8871b7182e69ec5e75effb45 # v2
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl
-          coverage: pcov
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath
+          coverage: xdebug
+          ini-values: xdebug.mode=coverage
 
       - name: Get Composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-infection-${{ hashFiles('**/composer.json') }}
@@ -37,13 +37,19 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: Run Mutation Testing
+      - name: Allow Infection Composer plugin
+        run: composer config allow-plugins.infection/extension-installer true
+
+      - name: Install Infection
+        run: composer require --dev infection/infection --no-interaction --no-progress
+
+      - name: Run Infection (Mutation Testing)
         run: |
           vendor/bin/infection \
             --threads=4 \
             --min-msi=50 \
             --min-covered-msi=60 \
-            --no-progress \
-            --ignore-msi-with-no-mutations
+            --no-progress
         env:
-          XDEBUG_MODE: off
+          XDEBUG_MODE: coverage
+          INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}
