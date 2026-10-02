@@ -20,8 +20,7 @@ jobs:
         with:
           php-version: '8.3'
           extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath
-          coverage: xdebug
-          ini-values: xdebug.mode=coverage
+          coverage: pcov
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -49,7 +48,7 @@ jobs:
             --threads=4 \
             --min-msi=50 \
             --min-covered-msi=60 \
-            --no-progress
+            --no-progress \
+            --ignore-msi-with-no-mutations
         env:
-          XDEBUG_MODE: coverage
-          INFECTION_BADGE_API_KEY: ${{ secrets.INFECTION_BADGE_API_KEY }}
+          XDEBUG_MODE: off
