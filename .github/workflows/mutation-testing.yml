@@ -45,6 +45,7 @@ jobs:
       - name: Run Infection (Mutation Testing)
         run: |
           vendor/bin/infection \
+            --test-framework=pest \
             --threads=4 \
             --min-msi=50 \
             --min-covered-msi=60 \
