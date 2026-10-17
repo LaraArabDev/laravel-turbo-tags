@@ -10,9 +10,31 @@ namespace LaraArabDev\TurboTags\Concerns;
  * Stores translations as a JSON object keyed by locale.
  * Resolves translations through a fallback chain:
  * requested locale -> config primary -> app locale -> config fallback -> first available.
+ *
+ * Accessing `$model->name` returns the translated string using the fallback chain.
+ * Use `getTranslations()` to access the raw locale-keyed array.
+ *
+ * Note: `$model->name` returns a string, while `$model->getAttributes()['name']`
+ * returns the raw JSON/array. Serialization via `toArray()` uses the cast (array),
+ * not this accessor. Use {@see getTranslatedName()} for explicit locale control.
  */
 trait HasTranslatableName
 {
+    /**
+     * Override getAttribute so that `$model->name` returns the translated string.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getAttribute($key)
+    {
+        if ($key === 'name') {
+            return $this->getTranslatedName();
+        }
+
+        return parent::getAttribute($key);
+    }
+
     /**
      * Get the translated name for a given locale.
      *
@@ -70,7 +92,7 @@ trait HasTranslatableName
         $translations = $this->getTranslations();
         $translations[$locale] = $value;
 
-        $this->name = $translations; // @phpstan-ignore property.notFound
+        $this->setAttribute('name', $translations);
 
         return $this;
     }
@@ -78,11 +100,17 @@ trait HasTranslatableName
     /**
      * Get all translations as a locale-keyed array.
      *
+     * Reads the raw attribute to avoid recursion with the name accessor.
+     *
      * @return array<string, string>
      */
     public function getTranslations(): array
     {
-        $name = $this->getAttribute('name');
+        $name = $this->getAttributes()['name'] ?? null;
+
+        if ($name === null) {
+            return [];
+        }
 
         if (is_string($name)) {
             /** @var array<string, string>|null $decoded */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use LaraArabDev\TurboTags\Models\Tag;
 
 return [
@@ -55,7 +57,6 @@ return [
     */
 
     'slugger' => [
-        'source' => 'name',
         'generate_on_create' => true,
         'generate_unique' => true,
     ],
@@ -74,19 +75,6 @@ return [
         'ttl' => 3600,
         'store' => null,
         'key_prefix' => 'turbo_tags',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Performance
-    |--------------------------------------------------------------------------
-    |
-    | Tune performance-related settings.
-    |
-    */
-
-    'performance' => [
-        'chunk_size' => 1000,
     ],
 
     /*
