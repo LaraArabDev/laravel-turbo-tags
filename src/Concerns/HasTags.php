@@ -215,7 +215,7 @@ trait HasTags
         /** @var list<int> */
         return $items
             ->map(fn (mixed $t): ?int => $t instanceof Tag ? $t->id : (\is_int($t) ? $t : null))
-            ->filter()
+            ->reject(fn (mixed $v): bool => $v === null)
             ->when($names !== [], fn ($ids) => $ids->merge(Tag::findOrCreateMany($names, $type, $locale)->pluck('id')))
             ->unique()
             ->values()

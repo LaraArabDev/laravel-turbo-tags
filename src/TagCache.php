@@ -17,27 +17,27 @@ use Illuminate\Support\Facades\Cache;
 class TagCache
 {
     /**
-     * Whether cache flushing is currently deferred.
+     * Nesting depth for deferred flush calls.
      */
-    protected static bool $deferFlush = false;
+    protected static int $deferFlushDepth = 0;
 
     /**
      * Execute a callback with cache flushing deferred.
      *
-     * Batches all flush calls during the callback into a single
-     * flush after it completes. Prevents N flushes during batch creates.
-     *
-     * @param  Closure  $callback  The callback to execute.
+     * Reentrant-safe: nested calls only flush once the outermost completes.
      */
     public static function withoutFlushing(Closure $callback): mixed
     {
-        static::$deferFlush = true;
+        static::$deferFlushDepth++;
 
         try {
             return $callback();
         } finally {
-            static::$deferFlush = false;
-            static::flush();
+            static::$deferFlushDepth--;
+
+            if (static::$deferFlushDepth === 0) {
+                static::flush();
+            }
         }
     }
 
@@ -83,6 +83,7 @@ class TagCache
      * Get a value from cache, or execute the callback and store the result.
      *
      * When caching is disabled, the callback is executed directly.
+     * Note: null values are not cached — the callback will be re-executed.
      *
      * @param  string  $suffix  The cache key suffix.
      * @param  Closure  $callback  The callback to execute on cache miss.
@@ -179,7 +180,7 @@ class TagCache
      */
     public static function flush(): void
     {
-        if (static::$deferFlush) {
+        if (static::$deferFlushDepth > 0) {
             return;
         }
 
