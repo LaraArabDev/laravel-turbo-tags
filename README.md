@@ -25,64 +25,57 @@
 </p>
 
 <p align="center">
-    PHP 8.2+ &middot; Laravel 11 / 12 &middot; 95%+ Test Coverage &middot; PHPStan Level Max &middot; Zero External Dependencies
+    Tag any Eloquent model with multilingual names, hierarchical trees, ownership scopes, and built-in analytics — zero external dependencies.<br>
+    PHP 8.2 – 8.4 · Laravel 11 / 12
 </p>
 
 <p align="center">
-    <a href="#-quick-start">Quick Start</a> &middot;
-    <a href="#-why-turbotags">Why TurboTags</a> &middot;
-    <a href="#-features">Features</a> &middot;
-    <a href="#-usage">Usage</a> &middot;
-    <a href="#-tag-reporting--analytics">Reporting</a> &middot;
-    <a href="#%EF%B8%8F-configuration">Configuration</a> &middot;
-    <a href="#-dependencies">Dependencies</a> &middot;
-    <a href="#-testing">Testing</a> &middot;
-    <a href="README.ar.md">العربية</a>
+    <b><a href="https://github.com/LaraArabDev">LaraArabDev</a></b> — We build, develop, empower, and contribute. An Arab open-source community crafting production-grade Laravel packages.<br>
+    <b><a href="https://github.com/LaraArabDev">LaraArabDev</a></b> — نبني، نطوّر، نُمكّن، ونُساهم. مجتمع عربي مفتوح المصدر يصنع حزم Laravel احترافية وجاهزة للإنتاج.
 </p>
 
 <p align="center">
-    <b><a href="https://github.com/LaraArabDev">LaraArabDev</a></b> — We build, develop, empower, and contribute. An Arab open-source community crafting production-grade Laravel packages.
+    <a href="#-quick-start">Quick Start</a> ·
+    <a href="#-features">Features</a> ·
+    <a href="#-usage">Usage</a> ·
+    <a href="#-configuration">Configuration</a> ·
+    <a href="#-faq">FAQ</a> ·
+    <a href="#-العربية">العربية</a>
 </p>
 
 ---
 
 ## What is TurboTags?
 
-**TurboTags** is a smart, all-in-one tagging and labeling system for Laravel. It gives you a powerful, flexible way to organize and categorize **any Eloquent model** — posts, products, users, orders, or anything else — using tags (also known as labels, categories, or keywords).
+Every Laravel app eventually needs tags — whether it's a blog with categories, an e-commerce platform with product labels, a knowledge base with topics, or a social platform with hashtags.
 
-Instead of building your own tagging logic from scratch or cobbling together multiple packages, TurboTags provides everything you need in a single package:
+**TurboTags** gives your Laravel app a complete tagging system with **zero external dependencies**. Install the package, add one trait to your models, and you're done. Every model can be tagged instantly with multilingual names, hierarchical trees, type categorization, and ownership scopes.
 
-- **Tag any model** — Add the `HasTags` trait to any Eloquent model and start tagging instantly. One trait, unlimited models.
-- **Multilingual out of the box** — Tag names are stored as JSON, supporting unlimited languages with an automatic fallback chain. No external translation package needed.
-- **Organize with hierarchies** — Build tag trees like `Programming > PHP > Laravel`. Navigate with `ancestors()`, `descendants()`, and recursive eager loading.
-- **Categorize with types** — Group tags into categories (e.g., "language", "framework", "skill") using simple strings or type-safe PHP `BackedEnum`.
-- **Own and scope tags** — Tags can be global, user-owned, or team-scoped. Perfect for multi-tenant apps or user-generated tag systems.
-- **Analyze tag usage** — Built-in reporting gives you the most popular tags, trending tags, and recently created tags.
-- **Cache intelligently** — A built-in cache layer with automatic invalidation keeps your app fast without stale data.
+But simple tagging is just the beginning. TurboTags also provides:
 
-Whether you're building a blog with categories, an e-commerce platform with product labels, a knowledge base with topics, or a social platform with hashtags — TurboTags handles it all with a clean, intuitive API.
+- **Built-in translations** — Tag names stored as JSON with an intelligent fallback chain. No external translation package needed.
+- **Hierarchical tags** — Build tag trees like `Programming > PHP > Laravel`. Navigate with `ancestors()`, `descendants()`, and recursive eager loading.
+- **Tag types** — Categorize tags (e.g., "language", "framework", "skill") using plain strings or type-safe PHP `BackedEnum`.
+- **Tag ownership** — Tags can be global, user-owned, or team-scoped. Perfect for multi-tenant apps.
+- **Analytics & reporting** — Built-in methods for most popular, trending, and recently created tags.
+- **Smart caching** — Configurable cache layer with automatic invalidation. No stale data.
+
+**You decide what to use.** Want just simple tags? Add the trait. Need multilingual tags with hierarchies? It's built in. Every feature is independent — enable exactly the combination that fits your application.
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
-### Installation
+Three commands. That's it.
 
 ```bash
 composer require laraarabdev/laravel-turbo-tags
-```
-
-Publish the configuration file and database migrations, then run the migrations:
-
-```bash
 php artisan vendor:publish --tag="laravel-turbo-tags-config"
 php artisan vendor:publish --tag="laravel-turbo-tags-migrations"
 php artisan migrate
 ```
 
-### Setup
-
-Add the `HasTags` trait to any model you want to tag:
+Now add the trait to any model you want to tag:
 
 ```php
 use LaraArabDev\TurboTags\Concerns\HasTags;
@@ -93,10 +86,10 @@ class Post extends Model
 }
 ```
 
-### Start tagging
+Every model can now be tagged. No configuration files to edit, no arrays to maintain, no boilerplate.
 
 ```php
-// Attach tags — they are automatically created if they don't exist
+// Attach tags — automatically created if they don't exist
 $post->attachTags(['Laravel', 'PHP', 'Open Source']);
 
 // Check tags
@@ -111,81 +104,15 @@ $tag = Tag::create([
 ]);
 ```
 
-That's it. No complex setup, no external dependencies, no boilerplate.
-
-### Requirements
-
 | Requirement | Version |
 | --- | --- |
-| PHP | 8.2 or higher |
-| Laravel | 11.x or 12.x |
+| PHP | 8.2, 8.3, or 8.4 |
+| Laravel | 11 or 12 |
 | External packages | **None** — everything is built in |
 
 ---
 
-## Why TurboTags?
-
-### Built-in translations — zero extra packages
-
-Other tagging packages require you to install a separate translation package (like `spatie/laravel-translatable`) for multilingual support. TurboTags stores translations natively as JSON in the database with an intelligent fallback chain:
-
-**Fallback order:** requested locale → config primary locale → app locale → config fallback locale → first available translation.
-
-This means your users always see a meaningful tag name, even if the preferred translation doesn't exist yet.
-
-```php
-$tag = Tag::create([
-    'name' => ['en' => 'Technology', 'ar' => 'تقنية', 'fr' => 'Technologie'],
-]);
-
-$tag->getTranslatedName('ar'); // "تقنية"
-$tag->getTranslatedName();     // Uses your app locale automatically
-```
-
-For single-language apps, you don't need to configure anything — just pass a string and TurboTags wraps it in the app locale for you.
-
-### Smart tag management for any model
-
-TurboTags uses Laravel's polymorphic `morphToMany` relationships, which means **the same tagging system works across all your models**. A `Post`, a `Product`, and a `User` can all share the same tag pool — or you can separate them by type. You don't need a separate tags table for each model.
-
-```php
-// Same tags, different models
-$post->attachTag('Featured');
-$product->attachTag('Featured');
-
-// Find everything tagged "Featured"
-$tag->taggedModels(Post::class);    // All featured posts
-$tag->taggedModels(Product::class); // All featured products
-```
-
-### Hierarchical tags out of the box
-
-Build tag trees like `Programming → PHP → Laravel`. Load entire subtrees with a single eager-loaded query. Navigate up with `ancestors()`, down with `descendants()`. Circular references are automatically prevented at both the database and model level.
-
-### Type-safe with PHP enums
-
-Categorize tags using native PHP `BackedEnum` — no magic strings that can be misspelled:
-
-```php
-enum TagType: string {
-    case Language = 'language';
-    case Framework = 'framework';
-}
-
-$post->attachTag('Laravel', TagType::Framework);
-$post->syncTagsWithType(['PHP', 'Go'], TagType::Language);
-```
-
-### Production-tested quality
-
-- **95%+ code coverage** across 101 tests
-- **PHPStan level max** — zero static analysis errors
-- **Laravel Pint** — consistent code style
-- **Soft deletes**, **cache auto-invalidation**, **circular reference protection**
-
----
-
-## Features
+## 📦 Features
 
 | Feature | Description |
 | --- | --- |
@@ -196,21 +123,21 @@ $post->syncTagsWithType(['PHP', 'Go'], TagType::Language);
 | **Tag ownership** | Scope tags globally, per user, or per team. Query with `global()`, `ownedBy($user)`, `availableTo($user)`. |
 | **Query scopes** | Powerful filtering: `withAllTags`, `withAnyTags`, `withoutTags`, `withTagsOfType`, `withTagCount`. |
 | **Tag reporting** | Analytics: `mostPopular()`, `recent()`, `recentMostPopular()` — find trending, popular, and new tags. |
-| **Auto slug generation** | URL-friendly slugs generated automatically from the primary locale name, with uniqueness enforcement (`-2`, `-3` suffixes). |
+| **Auto slug generation** | URL-friendly slugs generated automatically from the primary locale name, with uniqueness enforcement. |
 | **Tag suggestions** | Search-as-you-type autocomplete with configurable minimum search length and result limit. |
 | **Smart caching** | Configurable cache layer with automatic invalidation on create/update/delete. Deferred flushing for batch operations. |
 | **Sync operations** | Replace tags globally or per type with `syncTags` and `syncTagsWithType`. Other tag types are preserved during type-specific sync. |
 | **Metadata storage** | Attach arbitrary JSON data to any tag via the `metadata` column — colors, icons, descriptions, anything. |
 | **Custom ordering** | Optional `order_column` for manual sort order. Query with `ordered()` scope. |
-| **Circular reference protection** | Prevents invalid parent-child cycles automatically, even through soft-deleted tags. Throws `InvalidArgumentException` if detected. |
-| **Soft deletes** | Tags support soft deleting. Child tags get `parent_id` set to `null` on parent deletion (`nullOnDelete`). |
+| **Circular reference protection** | Prevents invalid parent-child cycles automatically, even through soft-deleted tags. |
+| **Soft deletes** | Tags support soft deleting. Child tags get `parent_id` set to `null` on parent deletion. |
 | **Batch operations** | `findOrCreateMany` finds existing tags and creates missing ones in bulk, with only a single cache flush at the end. |
 
 ---
 
-## Usage
+## 📖 Usage
 
-### Attaching & detaching tags
+### Attaching & Detaching Tags
 
 ```php
 // By name — tags are automatically created if they don't exist
@@ -235,7 +162,7 @@ $post->detachTags(['Laravel', 'PHP']);
 $post->removeAllTags();
 ```
 
-### Syncing tags
+### Syncing Tags
 
 Sync replaces all existing tags with the ones you provide. It's the easiest way to update a model's tags from a form submission:
 
@@ -244,11 +171,10 @@ Sync replaces all existing tags with the ones you provide. It's the easiest way 
 $post->syncTags(['Laravel', 'PHP']);
 
 // Replace only tags of a specific type (other types are preserved)
-// This is useful when you have separate tag inputs for different categories
 $post->syncTagsWithType(['Python', 'Ruby'], 'language');
 ```
 
-### Checking tags
+### Checking Tags
 
 ```php
 $post->hasTag('Laravel');                // true / false
@@ -259,9 +185,7 @@ $post->hasAnyTags(['Laravel', 'Ruby']); // true if ANY is present
 $post->hasTag('PHP', 'language');        // true only if tagged as type "language"
 ```
 
-### Query scopes
-
-Use query scopes to find models based on their tags:
+### Query Scopes
 
 ```php
 // Models tagged with ALL of these tags (AND logic)
@@ -287,7 +211,7 @@ Post::withTagCount()->get();
 
 ### Hierarchical Tags
 
-Build tag trees with parent-child relationships. This is useful for categories, taxonomies, nested navigation, skill trees, or any structure where tags have a natural hierarchy.
+Build tag trees with parent-child relationships. Useful for categories, taxonomies, nested navigation, skill trees, or any structure where tags have a natural hierarchy.
 
 ```php
 // Create a tree: Programming → PHP → Laravel
@@ -344,11 +268,13 @@ $tag->getTranslations();        // ['en' => 'Technology', 'ar' => 'تقنية', 
 
 **Fallback chain:** requested locale → config `locale.primary` → `app()->getLocale()` → config `locale.fallback` → first available translation.
 
+For single-language apps, you don't need to configure anything — just pass a string and TurboTags wraps it in the app locale for you.
+
 ---
 
 ### Tag Ownership
 
-Scope tags to specific users, teams, or any Eloquent model. This is essential for multi-tenant applications or systems where users create their own tags.
+Scope tags to specific users, teams, or any Eloquent model. Essential for multi-tenant applications or systems where users create their own tags.
 
 ```php
 // Create a user-owned tag
@@ -403,13 +329,13 @@ $suggestions = Tag::suggestions('Lara');
 $suggestions = Tag::suggestions('PH', 'language', 'en', 5);
 ```
 
-The minimum search length is configurable (default: 2 characters) to prevent overly broad queries that return too many results.
+The minimum search length is configurable (default: 2 characters) to prevent overly broad queries.
 
 ---
 
 ### Active / Inactive Tags
 
-Tags have an `is_active` flag (default: `true`) for visibility control. Inactive tags are automatically excluded from `findOrCreate`, `suggestions`, and query scopes (`withAllTags`, `withAnyTags`, `withoutTags`):
+Tags have an `is_active` flag (default: `true`) for visibility control. Inactive tags are automatically excluded from `findOrCreate`, `suggestions`, and query scopes:
 
 ```php
 // Deactivate a tag without deleting it
@@ -430,34 +356,19 @@ This is separate from soft deletes — use `is_active` for toggling visibility, 
 
 ### Tag Metadata
 
-Attach arbitrary JSON data to any tag via the `metadata` column. Use it to store colors, icons, descriptions, display settings, or any custom fields your application needs:
+Attach arbitrary JSON data to any tag via the `metadata` column:
 
 ```php
-// Create a tag with metadata
 $tag = Tag::create([
     'name' => ['en' => 'Important'],
     'metadata' => [
         'color' => '#ff0000',
         'icon' => 'star',
         'description' => 'High priority items',
-        'display_order' => 1,
     ],
 ]);
 
-// Access metadata fields
-$tag->metadata['color'];       // '#ff0000'
-$tag->metadata['icon'];        // 'star'
-
-// Update metadata
-$tag->update([
-    'metadata' => ['color' => '#00ff00', 'icon' => 'check', 'badge' => true],
-]);
-
-// Use with types and enums
-$tag = Tag::findOrCreate('PHP', TagType::Language, 'en');
-$tag->update([
-    'metadata' => ['color' => '#4F5B93', 'logo' => 'php.svg'],
-]);
+$tag->metadata['color']; // '#ff0000'
 
 // Use metadata in your views
 @foreach($post->tags as $tag)
@@ -467,37 +378,34 @@ $tag->update([
 @endforeach
 ```
 
-Metadata is schemaless — there is no validation on what keys you store. It is cast to a PHP array automatically.
-
 ---
 
 ### Tag Reporting & Analytics
 
-TurboTags includes built-in reporting methods to help you understand how tags are being used across your application:
+Built-in reporting methods to understand how tags are being used:
 
 ```php
 use LaraArabDev\TurboTags\Models\Tag;
 
-// Get the most popular tags (ordered by total usage count across all models)
+// Most popular tags (ordered by total usage count across all models)
 $topTags = Tag::mostPopular(10);            // Top 10 most used tags
 $topLangs = Tag::mostPopular(5, 'language'); // Top 5 most used language tags
 
-// Get the most recently created tags
+// Most recently created tags
 $newTags = Tag::recent(10);                 // 10 newest tags
-$newLangs = Tag::recent(5, 'language');     // 5 newest language tags
 
-// Get trending tags — most popular within a recent time window
+// Trending tags — most popular within a recent time window
 $trending = Tag::recentMostPopular(10, 30);          // Top 10 in the last 30 days
 $trending = Tag::recentMostPopular(5, 7, 'language'); // Top 5 languages in the last 7 days
 ```
 
-All reporting methods return tags with a `taggables_count` attribute showing how many models are tagged with each tag. Use this for tag clouds, trending sections, sidebar widgets, and admin dashboards.
+All reporting methods return tags with a `taggables_count` attribute. Use this for tag clouds, trending sections, sidebar widgets, and admin dashboards.
 
 ---
 
 ### Caching
 
-Enable the built-in cache layer for high-traffic applications. The cache is **automatically invalidated** whenever tags are created, updated, or deleted — no manual flushing needed.
+Enable the built-in cache layer for high-traffic applications. The cache is **automatically invalidated** whenever tags are created, updated, or deleted.
 
 ```php
 // config/laravel-turbo-tags.php
@@ -508,8 +416,6 @@ Enable the built-in cache layer for high-traffic applications. The cache is **au
     'key_prefix' => 'turbo_tags',
 ],
 ```
-
-Cached methods: `findOrCreate`, `allCached`, `allOfTypeCached`, `suggestions`.
 
 ```php
 // Get all tags from cache (fast repeated access)
@@ -525,125 +431,68 @@ Tag::flushTagCache();
 
 ---
 
-### findOrCreate — Efficient tag resolution
+## ⚙️ Configuration
 
-Efficiently find existing tags or create new ones in a single call:
+After publishing the configuration file, you'll find it at `config/laravel-turbo-tags.php`:
 
-```php
-// Single tag — uses cache if enabled
-$tag = Tag::findOrCreate('Laravel', 'framework', 'en');
+<details>
+<summary><strong>Full configuration reference</strong></summary>
 
-// Batch — 1 query to find existing, creates only missing ones, 1 cache flush total
-$tags = Tag::findOrCreateMany(['PHP', 'Laravel', 'Testing'], 'framework', 'en');
-```
-
----
-
-## Dependencies
-
-### Production Dependencies
-
-TurboTags has **zero external package dependencies**. It only requires Laravel's core framework components, which are already part of every Laravel application:
-
-| Package | Version | What it provides |
+| Key | Default | Description |
 | --- | --- | --- |
-| `php` | ^8.2 | Minimum PHP version for modern type features (enums, named arguments, fibers) |
-| `illuminate/contracts` | ^11.0 \| ^12.0 | Laravel's interface contracts. Provides the base interfaces that TurboTags implements, ensuring compatibility with Laravel's service container and dependency injection. |
-| `illuminate/database` | ^11.0 \| ^12.0 | Laravel's Eloquent ORM and database layer. TurboTags uses this for models, migrations, relationships (morphToMany), query scopes, and soft deletes. This is the core of how tags are stored and queried. |
-| `illuminate/support` | ^11.0 \| ^12.0 | Laravel's support utilities (Collections, Str helpers, ServiceProvider, etc.). Used for the service provider, cache management, slug generation, and collection operations. |
+| **General** | | |
+| `tag_model` | `Tag::class` | Custom Tag model class |
+| `tables.tags` | `'tags'` | Tags table name |
+| `tables.taggables` | `'taggables'` | Pivot table name |
+| **Locale** | | |
+| `locale.primary` | `null` | Primary locale (null = app locale) |
+| `locale.fallback` | `null` | Fallback locale |
+| **Slugger** | | |
+| `slugger.source` | `'name'` | Field to generate slug from |
+| `slugger.generate_on_create` | `true` | Auto-generate slug on creation |
+| `slugger.generate_unique` | `true` | Append `-2`, `-3` for uniqueness |
+| **Cache** | | |
+| `cache.enabled` | `false` | Enable caching (set `true` in production) |
+| `cache.ttl` | `3600` | Cache lifetime in seconds |
+| `cache.store` | `null` | Cache store (null = default driver) |
+| `cache.key_prefix` | `'turbo_tags'` | Cache key prefix |
+| **Performance** | | |
+| `performance.chunk_size` | `1000` | Chunk size for bulk operations |
+| **Suggestions** | | |
+| `suggestions.limit` | `10` | Max suggestions returned |
+| `suggestions.min_length` | `2` | Min characters before suggestions activate |
 
-**These are not extra packages you need to install.** They ship with every Laravel application automatically. When you run `composer require laraarabdev/laravel-turbo-tags`, Composer resolves them from your existing Laravel installation. No additional downloads, no dependency conflicts, no bloat.
-
-### Development Dependencies (not installed in your app)
-
-These packages are only used for developing and testing TurboTags itself. They are **not** installed when you require TurboTags in your project:
-
-| Package | Purpose |
-| --- | --- |
-| `pestphp/pest` | Testing framework — runs the 101 test suite |
-| `pestphp/pest-plugin-laravel` | Laravel-specific Pest testing helpers |
-| `orchestra/testbench` | Simulates a full Laravel app environment for package testing |
-| `phpstan/phpstan` | Static analysis to catch type errors before runtime |
-| `larastan/larastan` | PHPStan rules tailored for Laravel conventions |
-| `laravel/pint` | Code style fixer to maintain consistent formatting |
-
----
-
-## Configuration
-
-After publishing the configuration file (`php artisan vendor:publish --tag="laravel-turbo-tags-config"`), you'll find it at `config/laravel-turbo-tags.php`:
-
-```php
-return [
-    // Use a custom Tag model (extend the base Tag if you need custom behavior)
-    'tag_model' => \LaraArabDev\TurboTags\Models\Tag::class,
-
-    // Database table names — customize if they conflict with your existing tables
-    'tables' => [
-        'tags' => 'tags',
-        'taggables' => 'taggables',
-    ],
-
-    // Locale settings for translations
-    // Set to null to use your app's locale (config('app.locale'))
-    'locale' => [
-        'primary' => null,       // e.g., 'en' or 'ar'
-        'fallback' => null,      // e.g., 'en'
-    ],
-
-    // Slug generation — auto-creates URL-friendly slugs from tag names
-    'slugger' => [
-        'source' => 'name',
-        'generate_on_create' => true,   // Generate slug automatically on creation
-        'generate_unique' => true,      // Append -2, -3, etc. to ensure uniqueness
-    ],
-
-    // Caching — enable in production for faster tag lookups
-    'cache' => [
-        'enabled' => false,      // Set to true in production
-        'ttl' => 3600,           // Cache lifetime in seconds
-        'store' => null,         // null = your app's default cache driver
-        'key_prefix' => 'turbo_tags',
-    ],
-
-    // Performance tuning
-    'performance' => [
-        'chunk_size' => 1000,    // Chunk size for bulk database operations
-    ],
-
-    // Suggestion / autocomplete settings
-    'suggestions' => [
-        'limit' => 10,           // Maximum number of suggestions returned
-        'min_length' => 2,       // Minimum characters before suggestions activate
-    ],
-];
-```
+</details>
 
 ---
 
-## Database Schema
+## 📋 Database Schema
 
-TurboTags creates two tables when you run the migration:
+TurboTags creates two tables:
 
-### `tags` table
+<details>
+<summary><strong>tags table</strong></summary>
 
 | Column | Type | Description |
 | --- | --- | --- |
 | `id` | bigint (PK) | Primary key |
 | `name` | JSON | Tag name — stores translations as `{"en": "Tech", "ar": "تقنية"}` |
 | `slug` | string (unique) | Auto-generated URL-friendly identifier |
-| `type` | string (nullable, indexed) | Tag category — e.g., "language", "framework" |
+| `type` | string (nullable, indexed) | Tag category |
 | `order_column` | integer (nullable) | Optional manual sort order |
-| `is_active` | boolean (default: true) | Whether the tag is active (inactive tags are excluded from queries) |
-| `metadata` | JSON (nullable) | Arbitrary JSON data for custom fields |
+| `is_active` | boolean (default: true) | Visibility flag |
+| `metadata` | JSON (nullable) | Arbitrary JSON data |
 | `owner_type` | string (nullable) | Polymorphic owner model class |
 | `owner_id` | bigint (nullable) | Polymorphic owner model ID |
-| `parent_id` | bigint (nullable, indexed) | Self-referencing foreign key for hierarchy |
+| `parent_id` | bigint (nullable, indexed) | Self-referencing FK for hierarchy |
 | `created_at` | timestamp | Creation timestamp |
 | `updated_at` | timestamp | Last update timestamp |
 | `deleted_at` | timestamp (nullable) | Soft delete timestamp |
 
-### `taggables` table (pivot)
+</details>
+
+<details>
+<summary><strong>taggables table (pivot)</strong></summary>
 
 | Column | Type | Description |
 | --- | --- | --- |
@@ -656,150 +505,279 @@ TurboTags creates two tables when you run the migration:
 
 A unique constraint on `(tag_id, taggable_id, taggable_type)` prevents duplicate tag attachments.
 
+</details>
+
 ---
 
-## Testing
+## ❓ FAQ
 
-The package has **101 tests** with **95%+ code coverage** and passes **PHPStan at max level**.
+<details>
+<summary><strong>Does this require a lot of configuration?</strong></summary>
+
+No. Install, migrate, add the `HasTags` trait — that's it. TurboTags works with sensible defaults out of the box. It automatically creates tags on the fly, generates slugs, and handles translations. You only configure things when you want to change the defaults.
+</details>
+
+<details>
+<summary><strong>Will this slow down my app?</strong></summary>
+
+No. Tag operations are standard Eloquent queries. For high-traffic apps, enable the built-in cache layer (`cache.enabled = true`) to eliminate repeated database lookups. Batch operations like `findOrCreateMany` use deferred cache flushing — only one flush at the end instead of one per tag.
+</details>
+
+<details>
+<summary><strong>Do I need a translation package for multilingual tags?</strong></summary>
+
+No. TurboTags stores translations natively as JSON in the database. No `spatie/laravel-translatable` or any other package is needed. The fallback chain (requested locale → primary locale → app locale → fallback locale → first available) ensures users always see a meaningful name.
+</details>
+
+<details>
+<summary><strong>Can tags be shared across different models?</strong></summary>
+
+Yes. TurboTags uses Laravel's polymorphic `morphToMany` relationships. A `Post`, a `Product`, and a `User` can all share the same tag pool. You can also separate them by type if needed.
+</details>
+
+<details>
+<summary><strong>How do I prevent circular references in hierarchical tags?</strong></summary>
+
+You don't need to — TurboTags handles it automatically. Setting a tag's parent to itself or to one of its own descendants throws `InvalidArgumentException`. This protection works even through soft-deleted tags, with a depth limit of 100 to prevent stack overflow.
+</details>
+
+<details>
+<summary><strong>What's the difference between is_active and soft deletes?</strong></summary>
+
+`is_active` is for **visibility control** — toggle a tag off without removing it. Inactive tags are excluded from `findOrCreate`, `suggestions`, and query scopes like `withAllTags`. Soft deletes are for **actual deletion** — the tag is removed but can be restored. Use `is_active` for temporary hiding, soft deletes for permanent removal.
+</details>
+
+<details>
+<summary><strong>Can I use this in a multi-tenant application?</strong></summary>
+
+Yes. Use tag ownership to scope tags per user or team:
+
+```php
+Tag::global()->get();             // Shared tags
+Tag::ownedBy($user)->get();       // User's private tags
+Tag::availableTo($user)->get();   // Both
+```
+</details>
+
+<details>
+<summary><strong>Does it work with BackedEnum for tag types?</strong></summary>
+
+Yes. All methods that accept a `$type` parameter also accept a `BackedEnum`. This gives you type-safety and IDE autocomplete instead of magic strings:
+
+```php
+enum TagType: string {
+    case Language = 'language';
+}
+
+$post->attachTag('PHP', TagType::Language);
+```
+</details>
+
+<details>
+<summary><strong>How do I handle tag storage growth?</strong></summary>
+
+Several options: (1) Use soft deletes to remove unused tags. (2) Use `is_active = false` to hide deprecated tags. (3) Set up cache with a reasonable TTL. (4) Use `findOrCreateMany` for batch operations to minimize queries. Tags are lightweight — a typical tag row is under 1KB.
+</details>
+
+---
+
+## 🧪 Testing & Quality
 
 ```bash
-# Run all tests
-composer test
-
-# Run tests with coverage report
-composer test-coverage
-
-# Static analysis (PHPStan max level)
-composer analyse
-
-# Check code style (Laravel Pint)
-composer format-test
-
-# Fix code style automatically
-composer format
+composer test           # Pest test suite
+composer test-coverage  # With code coverage
+composer analyse        # PHPStan (level max)
+composer format         # Laravel Pint
 ```
+
+| PHP | Laravel | Status |
+| --- | --- | --- |
+| 8.2 | 11 / 12 | Supported |
+| 8.3 | 11 / 12 | Supported |
+| 8.4 | 11 / 12 | Supported |
 
 ---
 
-## API Reference
-
-### `HasTags` Trait — Methods for your models
-
-| Method | Description |
-| --- | --- |
-| `tags()` | Returns the `morphToMany` relationship to tags |
-| `tagsOfType($type)` | Get tags filtered by type |
-| `attachTag($tags, $type, $locale)` | Attach one or more tags |
-| `attachTags($tags, $type, $locale)` | Alias for `attachTag` |
-| `detachTag($tags, $type, $locale)` | Detach one or more tags |
-| `detachTags($tags, $type, $locale)` | Alias for `detachTag` |
-| `syncTags($tags, $type, $locale)` | Replace all tags (or per type) |
-| `syncTagsWithType($tags, $type, $locale)` | Sync only tags of a specific type, preserving others |
-| `removeAllTags()` | Remove all tags from the model |
-| `hasTag($tag, $type, $locale)` | Check if model has a specific tag |
-| `hasAllTags($tags, $type, $locale)` | Check if model has all given tags |
-| `hasAnyTags($tags, $type, $locale)` | Check if model has any of the given tags |
-
-### `HasTags` Trait — Query Scopes
-
-| Scope | Description |
-| --- | --- |
-| `withAllTags($tags, $type, $locale)` | Models with ALL specified tags |
-| `withAnyTags($tags, $type, $locale)` | Models with ANY of the specified tags |
-| `withoutTags($tags, $type, $locale)` | Models without the specified tags |
-| `withTagsOfType($type)` | Models that have at least one tag of the given type |
-| `withTagsLoaded()` | Eager load the `tags` relationship |
-| `withTagCount()` | Add a `tags_count` attribute to the query |
-
-### `Tag` Model — Static Methods
-
-| Method | Description |
-| --- | --- |
-| `Tag::findOrCreate($name, $type, $locale)` | Find an existing tag or create a new one |
-| `Tag::findOrCreateMany($names, $type, $locale)` | Batch find or create multiple tags |
-| `Tag::allCached()` | Get all tags from cache |
-| `Tag::allOfTypeCached($type)` | Get cached tags filtered by type |
-| `Tag::suggestions($search, $type, $locale, $limit)` | Search for tag suggestions (autocomplete) |
-| `Tag::flushTagCache()` | Manually flush all cached tags |
-| `Tag::mostPopular($limit, $type)` | Get tags ordered by usage count |
-| `Tag::recent($limit, $type)` | Get most recently created tags |
-| `Tag::recentMostPopular($limit, $days, $type)` | Get popular tags within a time window |
-
-### `Tag` Model — Query Scopes
-
-| Scope | Description |
-| --- | --- |
-| `Tag::active()` | Only active tags (`is_active = true`) |
-| `Tag::inactive()` | Only inactive tags (`is_active = false`) |
-| `Tag::roots()` | Only root tags (no parent) |
-| `Tag::global()` | Only tags with no owner |
-| `Tag::ownedBy($model)` | Tags owned by a specific model |
-| `Tag::availableTo($model)` | Global tags + tags owned by the model |
-| `Tag::ofType($type)` | Filter by tag type |
-| `Tag::containing($search, $locale)` | Tags whose name contains the search string |
-| `Tag::ordered($direction)` | Sort by `order_column` |
-| `Tag::withSlug($slug)` | Find by slug |
-
-### `Tag` Model — Instance Methods
-
-| Method | Description |
-| --- | --- |
-| `$tag->parent` | Get the parent tag (BelongsTo relationship) |
-| `$tag->children` | Get direct child tags (HasMany relationship) |
-| `$tag->childrenRecursive` | Get the full subtree, eager-loadable |
-| `$tag->ancestors()` | Get all ancestors from bottom to top |
-| `$tag->descendants()` | Get all descendants, flattened |
-| `$tag->isRoot()` | Returns `true` if the tag has no parent |
-| `$tag->isLeaf()` | Returns `true` if the tag has no children |
-| `$tag->getTranslatedName($locale)` | Get the tag name in a specific locale |
-| `$tag->setTranslatedName($value, $locale)` | Set or update a translation |
-| `$tag->getTranslations()` | Get all translations as an array |
-| `$tag->hasTranslation($locale)` | Check if a specific translation exists |
-| `$tag->taggedModels(Model::class)` | Get all models of a given class tagged with this tag |
-
----
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-We welcome contributions from the community! Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details. All contributions must meet our [acceptance criteria](.github/CONTRIBUTING.md#acceptance-criteria).
-
-### Commit Convention
-
-This project follows [Conventional Commits](https://www.conventionalcommits.org/). All commit messages and PR titles must follow this format:
-
-```
-type(scope): description
-```
-
-**Allowed types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`, `hotfix`
-
-**Branch naming:** `type/short-description` (e.g., `feat/add-caching`, `fix/slug-generation`)
-
-## Security
+## 🔐 Security
 
 Please review [our security policy](SECURITY.md) on how to report security vulnerabilities. **Do not** open a public issue.
 
-## Policies
+---
 
-| Document | Description |
-| --- | --- |
-| [Code of Conduct](.github/CODE_OF_CONDUCT.md) | Community standards and expectations |
-| [Contributing Guide](.github/CONTRIBUTING.md) | How to contribute, conventions, and acceptance criteria |
-| [Security Policy](SECURITY.md) | How to report vulnerabilities responsibly |
-| [Support](.github/SUPPORT.md) | How to get help |
-| [Governance](.github/GOVERNANCE.md) | Decision-making process and roles |
-| [Code Owners](.github/CODEOWNERS) | Required reviewers by area |
+## 📄 Credits & License
 
-## License
+- [LaraArabDev](https://github.com/LaraArabDev)
+- [All Contributors](../../contributors)
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+MIT License — see [LICENSE](LICENSE.md) for details.
 
 ---
 
-<p align="center">
-    <sub>Built with &#10084; by <a href="https://github.com/LaraArabDev">LaraArabDev</a> — An Arab open-source community</sub>
-</p>
+## 🇸🇦 العربية
+
+<div dir="rtl" align="right">
+
+### ما هو TurboTags؟
+
+**TurboTags** حزمة Laravel تمنح تطبيقك نظام وسوم كامل بدون أي اعتمادات خارجية. ثبّت الحزمة، أضف trait واحد، وكل موديل يمكن وسمه فوراً مع أسماء متعددة اللغات، أشجار هرمية، تصنيف بالأنواع، ونطاقات ملكية.
+
+لكن الوسوم البسيطة هي البداية فقط. يمكن لـ TurboTags أيضاً:
+
+- **ترجمة مدمجة** — أسماء الوسوم تُخزّن كـ JSON بدعم لغات غير محدود. لا حاجة لحزمة ترجمة خارجية.
+- **وسوم هرمية** — أنشئ أشجار وسوم مثل `برمجة > PHP > Laravel`. تنقّل بـ `ancestors()` و `descendants()`.
+- **أنواع الوسوم** — صنّف الوسوم باستخدام نصوص بسيطة أو PHP `BackedEnum` الآمن.
+- **ملكية الوسوم** — وسوم عامة، أو ملك مستخدم، أو خاصة بفريق. مثالي للتطبيقات متعددة المستأجرين.
+- **تحليلات مدمجة** — الوسوم الأكثر شعبية، الرائجة، والمُنشأة حديثاً.
+- **تخزين مؤقت ذكي** — طبقة تخزين مؤقت مع إبطال تلقائي.
+
+### التثبيت
+
+```bash
+composer require laraarabdev/laravel-turbo-tags
+php artisan vendor:publish --tag="laravel-turbo-tags-config"
+php artisan vendor:publish --tag="laravel-turbo-tags-migrations"
+php artisan migrate
+```
+
+### البداية السريعة
+
+```php
+use LaraArabDev\TurboTags\Concerns\HasTags;
+
+class Post extends Model
+{
+    use HasTags;  // يُفعّل الوسوم تلقائياً
+}
+```
+
+```php
+// إضافة وسوم — تُنشأ تلقائيًا إن لم تكن موجودة
+$post->attachTags(['Laravel', 'PHP', 'Open Source']);
+
+// التحقق من الوسوم
+$post->hasTag('Laravel'); // true
+
+// البحث عن موديلات بوسوم محددة
+Post::withAllTags(['Laravel', 'PHP'])->get();
+
+// وسوم متعددة اللغات
+$tag = Tag::create([
+    'name' => ['en' => 'Technology', 'ar' => 'تقنية'],
+]);
+```
+
+### الميزات الرئيسية
+
+| الميزة | الوصف |
+| --- | --- |
+| **وسوم متعددة الأشكال** | أضف وسومًا لأي موديل Eloquent. نظام وسوم واحد لتطبيقك بالكامل. |
+| **ترجمة مدمجة** | أسماء وسوم متعددة اللغات مخزنة كـ JSON — بدون حزم ترجمة خارجية. |
+| **وسوم هرمية** | بنية شجرية أب-ابن مع تحميل متلهف متكرر. |
+| **أنواع الوسوم** | صنّف الوسوم بنصوص عادية أو PHP `BackedEnum` الآمن. |
+| **ملكية الوسوم** | وسوم عامة، لكل مستخدم، أو لكل فريق. |
+| **نطاقات الاستعلام** | `withAllTags`، `withAnyTags`، `withoutTags`، `withTagsOfType`، `withTagCount`. |
+| **تقارير الوسوم** | `mostPopular()`، `recent()`، `recentMostPopular()`. |
+| **روابط نصية تلقائية** | Slugs صديقة للروابط تُولّد تلقائيًا مع ضمان التفرد. |
+| **اقتراحات الوسوم** | بحث أثناء الكتابة مع حد أدنى قابل للإعداد. |
+| **تخزين مؤقت ذكي** | إبطال تلقائي عند الإنشاء/التحديث/الحذف. |
+| **بيانات وصفية** | أرفق بيانات JSON عشوائية بأي وسم — ألوان، أيقونات، أوصاف. |
+| **حماية من المراجع الدائرية** | تمنع دورات أب-ابن غير صالحة تلقائيًا. |
+
+### الاستخدام
+
+```php
+// إضافة وإزالة الوسوم
+$post->attachTags(['Laravel', 'PHP']);
+$post->detachTag('PHP');
+$post->syncTags(['Laravel', 'Go']);
+$post->removeAllTags();
+
+// التحقق
+$post->hasTag('Laravel');               // true
+$post->hasAllTags(['Laravel', 'Go']);   // true
+$post->hasAnyTags(['Laravel', 'Ruby']); // true
+
+// نطاقات الاستعلام
+Post::withAllTags(['Laravel'])->get();
+Post::withAnyTags(['Laravel', 'Python'])->get();
+Post::withoutTags(['Deprecated'])->get();
+Post::withTagsOfType('language')->get();
+```
+
+### الوسوم الهرمية
+
+```php
+$programming = Tag::create(['name' => ['en' => 'Programming', 'ar' => 'برمجة']]);
+$php = Tag::create(['name' => ['en' => 'PHP'], 'parent_id' => $programming->id]);
+
+$php->parent;              // → وسم Programming
+$programming->children;    // → مجموعة [PHP]
+$php->ancestors();         // مجموعة: [Programming]
+$programming->descendants(); // مجموعة: [PHP]
+```
+
+### أنواع الوسوم و Enums
+
+```php
+enum TagType: string {
+    case Language = 'language';
+    case Framework = 'framework';
+}
+
+$post->attachTag('Laravel', TagType::Framework);
+$post->syncTagsWithType(['PHP', 'Go'], TagType::Language);
+Tag::ofType(TagType::Language)->get();
+```
+
+### التقارير والتحليلات
+
+```php
+Tag::mostPopular(10);                        // أكثر 10 وسوم استخدامًا
+Tag::recent(10);                             // أحدث 10 وسوم
+Tag::recentMostPopular(10, 30);              // أكثر 10 في آخر 30 يوم
+Tag::recentMostPopular(5, 7, 'language');     // أكثر 5 لغات في آخر 7 أيام
+```
+
+### الأسئلة الشائعة
+
+<details>
+<summary><strong>هل يحتاج إعداد كثير؟</strong></summary>
+
+لا. ثبّت، نفّذ التهجير، أضف `HasTags` trait — هذا كل شيء. يعمل بإعدادات ذكية افتراضياً.
+</details>
+
+<details>
+<summary><strong>هل يبطئ تطبيقي؟</strong></summary>
+
+لا. عمليات الوسوم هي استعلامات Eloquent عادية. فعّل التخزين المؤقت المدمج لتسريع البحث المتكرر.
+</details>
+
+<details>
+<summary><strong>هل أحتاج حزمة ترجمة للوسوم متعددة اللغات؟</strong></summary>
+
+لا. TurboTags يخزّن الترجمات أصلياً كـ JSON في قاعدة البيانات. لا حاجة لـ `spatie/laravel-translatable` أو أي حزمة أخرى.
+</details>
+
+<details>
+<summary><strong>هل تُشارك الوسوم بين موديلات مختلفة؟</strong></summary>
+
+نعم. يستخدم TurboTags علاقات Laravel متعددة الأشكال (`morphToMany`). المقال والمنتج والمستخدم يمكنهم مشاركة نفس مجموعة الوسوم.
+</details>
+
+<details>
+<summary><strong>هل يعمل في تطبيقات متعددة المستأجرين؟</strong></summary>
+
+نعم. استخدم ملكية الوسوم لتحديد النطاق لكل مستخدم أو فريق:
+
+```php
+Tag::global()->get();             // وسوم مشتركة
+Tag::ownedBy($user)->get();       // وسوم المستخدم الخاصة
+Tag::availableTo($user)->get();   // كلاهما
+```
+</details>
+
+---
+
+للتوثيق الكامل ومرجع API التفصيلي، راجع الأقسام الإنجليزية أعلاه.
+
+</div>
