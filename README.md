@@ -21,6 +21,7 @@
     <a href="https://codecov.io/gh/LaraArabDev/laravel-turbo-tags"><img src="https://img.shields.io/codecov/c/github/LaraArabDev/laravel-turbo-tags?style=for-the-badge&logo=codecov&logoColor=white" alt="Coverage"></a>
     <a href="https://github.com/LaraArabDev/laravel-turbo-tags/actions/workflows/static-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/laravel-turbo-tags/static-analysis.yml?branch=main&label=phpstan&style=for-the-badge&logo=github&logoColor=white" alt="Static Analysis"></a>
     <a href="https://github.com/LaraArabDev/laravel-turbo-tags/actions/workflows/code-style.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/laravel-turbo-tags/code-style.yml?branch=main&label=pint&style=for-the-badge&logo=github&logoColor=white" alt="Code Style"></a>
+    <a href="https://github.com/LaraArabDev/laravel-turbo-tags/actions/workflows/mutation-testing.yml"><img src="https://img.shields.io/github/actions/workflow/status/LaraArabDev/laravel-turbo-tags/mutation-testing.yml?branch=main&label=mutation&style=for-the-badge&logo=github&logoColor=white" alt="Mutation Testing"></a>
 </p>
 
 <p align="center">
