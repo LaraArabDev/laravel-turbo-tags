@@ -13,7 +13,7 @@
     <a href="https://packagist.org/packages/laraarabdev/laravel-turbo-tags"><img src="https://img.shields.io/packagist/dt/laraarabdev/laravel-turbo-tags?style=for-the-badge&logo=packagist&logoColor=white&color=blue" alt="Total Downloads"></a>
     <a href="LICENSE"><img src="https://img.shields.io/packagist/l/laraarabdev/laravel-turbo-tags?style=for-the-badge&color=green" alt="License"></a>
     <a href="https://php.net"><img src="https://img.shields.io/packagist/php-v/laraarabdev/laravel-turbo-tags?style=for-the-badge&logo=php&logoColor=white&color=777BB4" alt="PHP"></a>
-    <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-11.x%20|%2012.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"></a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-11.x%20|%2012.x%20|%2013.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel"></a>
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@
 
 <p align="center">
     Tag any Eloquent model with multilingual names, hierarchical trees, ownership scopes, and built-in analytics — zero external dependencies.<br>
-    PHP 8.2 – 8.4 · Laravel 11 / 12
+    PHP 8.2 – 8.4 · Laravel 11 / 12 / 13
 </p>
 
 <p align="center">
@@ -107,7 +107,7 @@ $tag = Tag::create([
 | Requirement | Version |
 | --- | --- |
 | PHP | 8.2, 8.3, or 8.4 |
-| Laravel | 11 or 12 |
+| Laravel | 11, 12, or 13 |
 | External packages | **None** — everything is built in |
 
 ---
@@ -592,9 +592,9 @@ composer format         # Laravel Pint
 
 | PHP | Laravel | Status |
 | --- | --- | --- |
-| 8.2 | 11 / 12 | Supported |
-| 8.3 | 11 / 12 | Supported |
-| 8.4 | 11 / 12 | Supported |
+| 8.2 | 11 / 12 / 13 | Supported |
+| 8.3 | 11 / 12 / 13 | Supported |
+| 8.4 | 11 / 12 / 13 | Supported |
 
 ---
 
