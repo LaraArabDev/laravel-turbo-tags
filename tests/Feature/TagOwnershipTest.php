@@ -1,6 +1,7 @@
 <?php
 
 use LaraArabDev\TurboTags\Models\Tag;
+use LaraArabDev\TurboTags\Tests\Fixtures\TestModel;
 use LaraArabDev\TurboTags\Tests\Fixtures\TestUser;
 
 it('creates global tags with null owner', function () {
@@ -102,4 +103,100 @@ it('scopes to tags available to a specific model', function () {
 
     expect($availableTags)->toHaveCount(2);
     expect($availableTags->pluck('slug')->sort()->values()->all())->toBe(['global', 'user1-tag']);
+});
+
+// ── createTag / createTags ────────────────────────────────────────────────────
+
+it('createTag creates a tag owned by the calling model and attaches it', function () {
+    $model = TestModel::create(['name' => 'Post One']);
+
+    $model->createTag('exclusive');
+
+    $model->refresh();
+
+    expect($model->tags)->toHaveCount(1);
+
+    $tag = $model->tags->first();
+    expect($tag->name)->toBe('exclusive');
+    expect($tag->owner_type)->toBe(TestModel::class);
+    expect($tag->owner_id)->toBe($model->getKey());
+});
+
+it('createTag does not create a duplicate when called twice with the same name', function () {
+    $model = TestModel::create(['name' => 'Post']);
+
+    $model->createTag('vip');
+    $model->createTag('vip');
+
+    expect(Tag::count())->toBe(1);
+    expect($model->tags()->count())->toBe(1);
+});
+
+it('createTag accepts an array of names', function () {
+    $model = TestModel::create(['name' => 'Post']);
+
+    $model->createTag(['alpha', 'beta', 'gamma']);
+
+    expect($model->tags()->count())->toBe(3);
+    expect(Tag::where('owner_type', TestModel::class)->where('owner_id', $model->getKey())->count())->toBe(3);
+});
+
+it('createTags is an alias for createTag', function () {
+    $model = TestModel::create(['name' => 'Post']);
+
+    $model->createTags(['one', 'two']);
+
+    expect($model->tags()->count())->toBe(2);
+});
+
+it('createTag isolates tags between different model instances', function () {
+    $model1 = TestModel::create(['name' => 'Post A']);
+    $model2 = TestModel::create(['name' => 'Post B']);
+
+    $model1->createTag('shared-name');
+    $model2->createTag('shared-name');
+
+    // Two separate owned tags exist — not the same record
+    expect(Tag::count())->toBe(2);
+
+    $tag1 = $model1->tags->first();
+    $tag2 = $model2->tags->first();
+    expect($tag1->id)->not->toBe($tag2->id);
+    expect($tag1->owner_id)->toBe($model1->getKey());
+    expect($tag2->owner_id)->toBe($model2->getKey());
+});
+
+it('createTag respects type', function () {
+    $model = TestModel::create(['name' => 'Post']);
+
+    $model->createTag('php', 'skill');
+
+    $tag = $model->tags->first();
+    expect($tag->type)->toBe('skill');
+    expect($tag->owner_type)->toBe(TestModel::class);
+});
+
+it('attachTag still creates global tags (no owner)', function () {
+    $model = TestModel::create(['name' => 'Post']);
+
+    $model->attachTag('global-tag');
+
+    $tag = $model->tags->first();
+    expect($tag->owner_type)->toBeNull();
+    expect($tag->owner_id)->toBeNull();
+});
+
+it('createTag and attachTag can coexist on the same model', function () {
+    $model = TestModel::create(['name' => 'Post']);
+
+    $model->attachTag('public-tag');
+    $model->createTag('private-tag');
+
+    expect($model->tags()->count())->toBe(2);
+
+    $owned = $model->tags->firstWhere('owner_type', TestModel::class);
+    $global = $model->tags->firstWhere('owner_type', null);
+
+    expect($owned->name)->toBe('private-tag');
+    expect($global->name)->toBe('public-tag');
 });
