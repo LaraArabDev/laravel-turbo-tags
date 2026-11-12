@@ -22,6 +22,10 @@ use LaraArabDev\TurboTags\Models\Tag;
  * @method static Builder<static> withTagsOfType(string|BackedEnum $type)
  * @method static Builder<static> withTagsLoaded()
  * @method static Builder<static> withTagCount()
+ *
+ * Owned-tag helpers (tag owner = this model instance):
+ * @method $this createTag(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null)
+ * @method $this createTags(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null)
  */
 trait HasTags
 {
@@ -86,6 +90,32 @@ trait HasTags
         $this->tags()->detach();
 
         return $this;
+    }
+
+    /**
+     * Find or create a tag owned by this model, then attach it.
+     *
+     * Unlike {@see attachTag()}, this method sets `owner_type` and `owner_id`
+     * on the tag to this model instance, isolating it from other models' tags.
+     *
+     * When passed an existing Tag instance or integer ID, it is attached as-is
+     * (ownership is not changed).
+     */
+    public function createTag(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): static
+    {
+        $this->tags()->syncWithoutDetaching($this->resolveOwnedTagIds($tags, $type, $locale));
+
+        return $this;
+    }
+
+    /**
+     * Find or create multiple tags owned by this model, then attach them.
+     *
+     * Alias for {@see createTag()} to match the plural convention.
+     */
+    public function createTags(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): static
+    {
+        return $this->createTag($tags, $type, $locale);
     }
 
     public function syncTags(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): static
@@ -195,6 +225,72 @@ trait HasTags
     }
 
     /**
+     * Resolve mixed input into owned tag IDs, creating missing tags with this model as owner.
+     *
+     * @return list<int>
+     */
+    protected function resolveOwnedTagIds(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): array
+    {
+        $type = $this->resolveType($type);
+        $resolvedLocale = $this->resolveLocale($locale);
+
+        $items = collect(match (true) {
+            \is_array($tags) => $tags,
+            $tags instanceof Collection => $tags->all(),
+            default => [$tags],
+        });
+
+        /** @var list<string> $names */
+        $names = $items->filter(fn (mixed $t): bool => \is_string($t))->unique()->values()->all();
+
+        /** @var list<int> */
+        return $items
+            ->map(fn (mixed $t): ?int => $t instanceof Tag ? $t->id : (\is_int($t) ? $t : null))
+            ->reject(fn (mixed $v): bool => $v === null)
+            ->when($names !== [], fn ($ids) => $ids->merge(
+                $this->findOrCreateOwnedTags($names, $type, $resolvedLocale)->pluck('id')
+            ))
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Find existing tags owned by this model or create new ones.
+     *
+     * @param  list<string>  $names
+     * @return Collection<int, Tag>
+     */
+    protected function findOrCreateOwnedTags(array $names, ?string $type, string $locale): Collection
+    {
+        $tagModel = $this->getTagModel();
+
+        $existing = $tagModel::query()
+            ->where('is_active', true)
+            ->where('owner_type', $this->getMorphClass())
+            ->where('owner_id', $this->getKey())
+            ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
+            ->whereIn("name->{$locale}", $names)
+            ->get()
+            ->keyBy(fn (Tag $tag): string => $tag->getTranslatedName($locale));
+
+        $tags = new Collection;
+
+        foreach ($names as $name) {
+            $found = $existing->get($name);
+
+            $tags->push($found ?? $tagModel::query()->create([
+                'name' => [$locale => $name],
+                'type' => $type,
+                'owner_type' => $this->getMorphClass(),
+                'owner_id' => $this->getKey(),
+            ]));
+        }
+
+        return $tags;
+    }
+
+    /**
      * Resolve mixed input into unique tag IDs.
      *
      * @return list<int>
@@ -228,6 +324,20 @@ trait HasTags
     protected function resolveType(string|BackedEnum|null $type): ?string
     {
         return $type instanceof BackedEnum ? (string) $type->value : $type;
+    }
+
+    /**
+     * Resolve the locale, falling back to the config primary or app locale.
+     */
+    protected function resolveLocale(?string $locale): string
+    {
+        if ($locale !== null) {
+            return $locale;
+        }
+
+        $primary = config('laravel-turbo-tags.locale.primary');
+
+        return \is_string($primary) ? $primary : app()->getLocale();
     }
 
     /**
