@@ -12,6 +12,7 @@
 
 use LaraArabDev\TurboTags\Models\Tag;
 use LaraArabDev\TurboTags\Tests\Fixtures\TestModel;
+use LaraArabDev\TurboTags\Tests\Fixtures\TestUser;
 
 // ── Bug 1: Read operations must not create tags ───────────────────────────────
 
@@ -182,4 +183,132 @@ it('resolveLocale falls back to app locale when config primary is not set', func
     $model->tags()->attach($tag->id);
 
     expect($model->hasTag('hallo'))->toBeTrue();
+});
+
+// ── Bug 6: Ownership leak — name-based lookups must only match global tags ────
+
+it('findOrCreate does not return an owned tag with the same name', function () {
+    $user = TestUser::create(['name' => 'Salem']);
+
+    $owned = Tag::create([
+        'name' => ['en' => 'vip'],
+        'type' => null,
+        'owner_type' => $user->getMorphClass(),
+        'owner_id' => $user->getKey(),
+    ]);
+
+    $found = Tag::findOrCreate('vip', null, 'en');
+
+    expect($found->id)->not->toBe($owned->id);
+    expect($found->owner_type)->toBeNull();
+});
+
+it('findOrCreateMany does not return owned tags', function () {
+    $user = TestUser::create(['name' => 'Salem']);
+
+    Tag::create([
+        'name' => ['en' => 'vip'],
+        'type' => null,
+        'owner_type' => $user->getMorphClass(),
+        'owner_id' => $user->getKey(),
+    ]);
+
+    $tags = Tag::findOrCreateMany(['vip'], null, 'en');
+
+    expect($tags)->toHaveCount(1);
+    expect($tags->first()->owner_type)->toBeNull();
+});
+
+it('resolveExistingTagIds does not match owned tags by name', function () {
+    $user = TestUser::create(['name' => 'Salem']);
+
+    Tag::create([
+        'name' => ['en' => 'vip'],
+        'type' => null,
+        'owner_type' => $user->getMorphClass(),
+        'owner_id' => $user->getKey(),
+    ]);
+
+    $model = TestModel::create(['name' => 'Post']);
+
+    // hasTag uses resolveExistingTagIds internally — should not find the owned tag
+    expect($model->hasTag('vip', null, 'en'))->toBeFalse();
+});
+
+it('attachTag by name does not attach an owned tag from another user', function () {
+    $user = TestUser::create(['name' => 'Salem']);
+
+    $owned = Tag::create([
+        'name' => ['en' => 'vip'],
+        'type' => null,
+        'owner_type' => $user->getMorphClass(),
+        'owner_id' => $user->getKey(),
+    ]);
+
+    $model = TestModel::create(['name' => 'Post']);
+    $model->attachTag('vip', null, 'en');
+
+    // Must have created a new global tag, not reused the owned one
+    $attachedTag = $model->tags->first();
+    expect($attachedTag->id)->not->toBe($owned->id);
+    expect($attachedTag->owner_type)->toBeNull();
+});
+
+it('withAllTags does not require owned tag when global and owned share a name', function () {
+    $user = TestUser::create(['name' => 'Salem']);
+
+    // Global vip tag
+    $global = Tag::create(['name' => ['en' => 'vip'], 'type' => null]);
+
+    // Owned vip tag (same name, different owner)
+    Tag::create([
+        'name' => ['en' => 'vip'],
+        'type' => null,
+        'owner_type' => $user->getMorphClass(),
+        'owner_id' => $user->getKey(),
+    ]);
+
+    $model = TestModel::create(['name' => 'Post']);
+    $model->tags()->attach($global->id);
+
+    // Should resolve only the global tag ID, so the model matches
+    $results = TestModel::withAllTags(['vip'], null, 'en')->get();
+    expect($results)->toHaveCount(1);
+});
+
+it('hasAllTags returns true when model has global tag and owned tag with same name exists', function () {
+    $user = TestUser::create(['name' => 'Salem']);
+
+    $global = Tag::create(['name' => ['en' => 'vip'], 'type' => null]);
+
+    Tag::create([
+        'name' => ['en' => 'vip'],
+        'type' => null,
+        'owner_type' => $user->getMorphClass(),
+        'owner_id' => $user->getKey(),
+    ]);
+
+    $model = TestModel::create(['name' => 'Post']);
+    $model->tags()->attach($global->id);
+
+    expect($model->hasAllTags(['vip'], null, 'en'))->toBeTrue();
+});
+
+// ── Bug 7: withAllTags([]) must not return all records ────────────────────────
+
+it('withAllTags with empty array returns no results', function () {
+    TestModel::create(['name' => 'Post']);
+    TestModel::create(['name' => 'Article']);
+
+    $results = TestModel::withAllTags([])->get();
+
+    expect($results)->toHaveCount(0);
+});
+
+it('withAllTags with empty collection returns no results', function () {
+    TestModel::create(['name' => 'Post']);
+
+    $results = TestModel::withAllTags(collect([]))->get();
+
+    expect($results)->toHaveCount(0);
 });
