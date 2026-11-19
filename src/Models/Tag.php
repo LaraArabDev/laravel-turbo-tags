@@ -304,7 +304,7 @@ class Tag extends Model
     /**
      * Get the parent tag.
      *
-     * @return BelongsTo<self, $this>
+     * @return BelongsTo<static, $this>
      */
     public function parent(): BelongsTo
     {
@@ -314,7 +314,7 @@ class Tag extends Model
     /**
      * Get the direct children tags.
      *
-     * @return HasMany<self, $this>
+     * @return HasMany<static, $this>
      */
     public function children(): HasMany
     {
@@ -324,7 +324,7 @@ class Tag extends Model
     /**
      * Get all children recursively (eager-loadable).
      *
-     * @return HasMany<self, $this>
+     * @return HasMany<static, $this>
      */
     public function childrenRecursive(): HasMany
     {
