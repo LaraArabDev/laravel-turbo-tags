@@ -71,7 +71,7 @@ trait HasTags
 
     public function detachTag(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): static
     {
-        $this->tags()->detach($this->resolveTagIds($tags, $type, $locale));
+        $this->tags()->detach($this->resolveExistingTagIds($tags, $type, $locale));
 
         return $this;
     }
@@ -122,14 +122,26 @@ trait HasTags
         $table = $this->resolveTagsTable();
 
         return $this->tags()
-            ->whereIn("{$table}.id", $this->resolveTagIds($tag, $type, $locale))
+            ->whereIn("{$table}.id", $this->resolveExistingTagIds($tag, $type, $locale))
             ->exists();
     }
 
     public function hasAllTags(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): bool
     {
         $table = $this->resolveTagsTable();
-        $ids = $this->resolveTagIds($tags, $type, $locale);
+
+        $uniqueInputCount = collect(match (true) {
+            \is_array($tags) => $tags,
+            $tags instanceof Collection => $tags->all(),
+            default => [$tags],
+        })->unique()->count();
+
+        $ids = $this->resolveExistingTagIds($tags, $type, $locale);
+
+        // If fewer IDs resolved than items requested, some tags don't exist → cannot have all
+        if (\count($ids) < $uniqueInputCount) {
+            return false;
+        }
 
         return $this->tags()->whereIn("{$table}.id", $ids)->count() === \count($ids);
     }
@@ -145,7 +157,21 @@ trait HasTags
     public function scopeWithAllTags(Builder $query, mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): void
     {
         $table = $this->resolveTagsTable();
-        $ids = $this->resolveTagIds($tags, $type, $locale);
+
+        $uniqueInputCount = collect(match (true) {
+            \is_array($tags) => $tags,
+            $tags instanceof Collection => $tags->all(),
+            default => [$tags],
+        })->unique()->count();
+
+        $ids = $this->resolveExistingTagIds($tags, $type, $locale);
+
+        // Some requested tags don't exist as active tags — no model can have all of them
+        if (\count($ids) < $uniqueInputCount) {
+            $query->whereRaw('0 = 1');
+
+            return;
+        }
 
         $query->whereHas('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $ids), '>=', \count($ids));
     }
@@ -157,7 +183,7 @@ trait HasTags
     {
         $table = $this->resolveTagsTable();
 
-        $query->whereHas('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $this->resolveTagIds($tags, $type, $locale)));
+        $query->whereHas('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $this->resolveExistingTagIds($tags, $type, $locale)));
     }
 
     /**
@@ -167,7 +193,7 @@ trait HasTags
     {
         $table = $this->resolveTagsTable();
 
-        $query->whereDoesntHave('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $this->resolveTagIds($tags, $type, $locale)));
+        $query->whereDoesntHave('tags', fn (Builder $q) => $q->where("{$table}.is_active", true)->whereIn("{$table}.id", $this->resolveExistingTagIds($tags, $type, $locale)));
     }
 
     /**
@@ -195,7 +221,48 @@ trait HasTags
     }
 
     /**
-     * Resolve mixed input into unique tag IDs.
+     * Resolve mixed input into existing tag IDs — never creates tags.
+     *
+     * Used by all read-only operations (hasTag, scopes, detachTag) so they
+     * cannot create orphan tags as a side effect.
+     *
+     * @return list<int>
+     */
+    protected function resolveExistingTagIds(mixed $tags, string|BackedEnum|null $type = null, ?string $locale = null): array
+    {
+        $type = $this->resolveType($type);
+        $resolvedLocale = $this->resolveLocale($locale);
+        $tagModel = $this->getTagModel();
+
+        $items = collect(match (true) {
+            \is_array($tags) => $tags,
+            $tags instanceof Collection => $tags->all(),
+            default => [$tags],
+        });
+
+        /** @var list<string> $names */
+        $names = $items->filter(fn (mixed $t): bool => \is_string($t))->values()->all();
+
+        /** @var list<int> */
+        return $items
+            ->map(fn (mixed $t): ?int => $t instanceof Tag ? $t->id : (\is_int($t) ? $t : null))
+            ->reject(fn (mixed $v): bool => $v === null)
+            ->when($names !== [], fn ($ids) => $ids->merge(
+                $tagModel::query()
+                    ->where('is_active', true)
+                    ->where('type', $type)
+                    ->whereIn("name->{$resolvedLocale}", $names)
+                    ->pluck('id')
+            ))
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Resolve mixed input into tag IDs, creating tags for missing string names.
+     *
+     * Used only by write operations (attachTag, syncTags).
      *
      * @return list<int>
      */
@@ -212,11 +279,13 @@ trait HasTags
         /** @var list<string> $names */
         $names = $items->filter(fn (mixed $t): bool => \is_string($t))->values()->all();
 
+        $tagModel = $this->getTagModel();
+
         /** @var list<int> */
         return $items
             ->map(fn (mixed $t): ?int => $t instanceof Tag ? $t->id : (\is_int($t) ? $t : null))
             ->reject(fn (mixed $v): bool => $v === null)
-            ->when($names !== [], fn ($ids) => $ids->merge(Tag::findOrCreateMany($names, $type, $locale)->pluck('id')))
+            ->when($names !== [], fn ($ids) => $ids->merge($tagModel::findOrCreateMany($names, $type, $locale)->pluck('id')))
             ->unique()
             ->values()
             ->all();
@@ -228,6 +297,20 @@ trait HasTags
     protected function resolveType(string|BackedEnum|null $type): ?string
     {
         return $type instanceof BackedEnum ? (string) $type->value : $type;
+    }
+
+    /**
+     * Resolve the locale, falling back to the config primary or app locale.
+     */
+    protected function resolveLocale(?string $locale): string
+    {
+        if ($locale !== null) {
+            return $locale;
+        }
+
+        $primary = config('laravel-turbo-tags.locale.primary');
+
+        return \is_string($primary) ? $primary : app()->getLocale();
     }
 
     /**
