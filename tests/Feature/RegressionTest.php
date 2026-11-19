@@ -139,3 +139,47 @@ it('findOrCreateMany with duplicate names returns consistent IDs', function () {
     $ids = $tags->pluck('id')->unique();
     expect($ids)->toHaveCount(2);
 });
+
+// ── Collection input branches ─────────────────────────────────────────────────
+
+it('hasAllTags accepts a Collection of tag names', function () {
+    $model = TestModel::create(['name' => 'Post']);
+    $model->attachTags(['a', 'b'], null, 'en');
+
+    $names = collect(['a', 'b']);
+
+    expect($model->hasAllTags($names, null, 'en'))->toBeTrue();
+});
+
+it('scopeWithAllTags accepts a Collection of tag names', function () {
+    $model = TestModel::create(['name' => 'Post']);
+    $model->attachTags(['x', 'y'], null, 'en');
+
+    $results = TestModel::withAllTags(collect(['x', 'y']), null, 'en')->get();
+
+    expect($results)->toHaveCount(1);
+});
+
+// ── resolveLocale fallback paths ──────────────────────────────────────────────
+
+it('resolveLocale uses config primary locale when no locale is passed', function () {
+    config(['laravel-turbo-tags.locale.primary' => 'fr']);
+
+    $model = TestModel::create(['name' => 'Post']);
+    $tag = Tag::create(['name' => ['fr' => 'bonjour'], 'type' => null]);
+    $model->tags()->attach($tag->id);
+
+    // hasTag with no explicit locale should resolve via config primary ('fr')
+    expect($model->hasTag('bonjour'))->toBeTrue();
+});
+
+it('resolveLocale falls back to app locale when config primary is not set', function () {
+    config(['laravel-turbo-tags.locale.primary' => null]);
+    app()->setLocale('de');
+
+    $model = TestModel::create(['name' => 'Post']);
+    $tag = Tag::create(['name' => ['de' => 'hallo'], 'type' => null]);
+    $model->tags()->attach($tag->id);
+
+    expect($model->hasTag('hallo'))->toBeTrue();
+});

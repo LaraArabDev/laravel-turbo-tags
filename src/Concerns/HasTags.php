@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection as BaseCollection;
 use LaraArabDev\TurboTags\Models\Tag;
 
 /**
@@ -132,7 +133,7 @@ trait HasTags
 
         $uniqueInputCount = collect(match (true) {
             \is_array($tags) => $tags,
-            $tags instanceof Collection => $tags->all(),
+            $tags instanceof BaseCollection => $tags->all(),
             default => [$tags],
         })->unique()->count();
 
@@ -160,7 +161,7 @@ trait HasTags
 
         $uniqueInputCount = collect(match (true) {
             \is_array($tags) => $tags,
-            $tags instanceof Collection => $tags->all(),
+            $tags instanceof BaseCollection => $tags->all(),
             default => [$tags],
         })->unique()->count();
 
@@ -236,7 +237,7 @@ trait HasTags
 
         $items = collect(match (true) {
             \is_array($tags) => $tags,
-            $tags instanceof Collection => $tags->all(),
+            $tags instanceof BaseCollection => $tags->all(),
             default => [$tags],
         });
 
@@ -272,7 +273,7 @@ trait HasTags
 
         $items = collect(match (true) {
             \is_array($tags) => $tags,
-            $tags instanceof Collection => $tags->all(),
+            $tags instanceof BaseCollection => $tags->all(),
             default => [$tags],
         });
 
