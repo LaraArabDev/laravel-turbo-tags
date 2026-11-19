@@ -164,11 +164,18 @@ trait HasTags
             default => [$tags],
         })->unique()->count();
 
+        // Empty input — no tags requested, return empty result to avoid matching all records
+        if ($uniqueInputCount === 0) {
+            $query->where($query->getModel()->getQualifiedKeyName(), '<', 0);
+
+            return;
+        }
+
         $ids = $this->resolveExistingTagIds($tags, $type, $locale);
 
         // Some requested tags don't exist as active tags — no model can have all of them
         if (\count($ids) < $uniqueInputCount) {
-            $query->whereRaw('0 = 1');
+            $query->where($query->getModel()->getQualifiedKeyName(), '<', 0);
 
             return;
         }
@@ -250,6 +257,7 @@ trait HasTags
             ->when($names !== [], fn ($ids) => $ids->merge(
                 $tagModel::query()
                     ->where('is_active', true)
+                    ->whereNull('owner_type')
                     ->where('type', $type)
                     ->whereIn("name->{$resolvedLocale}", $names)
                     ->pluck('id')

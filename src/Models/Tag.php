@@ -128,9 +128,10 @@ class Tag extends Model
             return $cached;
         }
 
-        // Query database (only active tags with an exact type match; null means typeless)
+        // Query database (only active, global tags with an exact type match; null means typeless)
         $tag = static::query()
             ->where('is_active', true)
+            ->whereNull('owner_type')
             ->where('type', $type)
             ->where("name->{$locale}", $name)
             ->first();
@@ -169,9 +170,10 @@ class Tag extends Model
         // Deduplicate names to avoid creating duplicate tags for repeated inputs
         $names = array_values(array_unique($names));
 
-        // 1 query: batch find all existing active tags with an exact type match
+        // 1 query: batch find all existing active, global tags with an exact type match
         $existing = static::query()
             ->where('is_active', true)
+            ->whereNull('owner_type')
             ->where('type', $type)
             ->whereIn("name->{$locale}", $names)
             ->get()
@@ -302,27 +304,27 @@ class Tag extends Model
     /**
      * Get the parent tag.
      *
-     * @return BelongsTo<self, $this>
+     * @return BelongsTo<static, $this>
      */
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(self::class, 'parent_id');
+        return $this->belongsTo(static::class, 'parent_id');
     }
 
     /**
      * Get the direct children tags.
      *
-     * @return HasMany<self, $this>
+     * @return HasMany<static, $this>
      */
     public function children(): HasMany
     {
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->hasMany(static::class, 'parent_id');
     }
 
     /**
      * Get all children recursively (eager-loadable).
      *
-     * @return HasMany<self, $this>
+     * @return HasMany<static, $this>
      */
     public function childrenRecursive(): HasMany
     {
