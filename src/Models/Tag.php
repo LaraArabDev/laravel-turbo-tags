@@ -128,10 +128,10 @@ class Tag extends Model
             return $cached;
         }
 
-        // Query database (only active tags)
+        // Query database (only active tags with an exact type match; null means typeless)
         $tag = static::query()
             ->where('is_active', true)
-            ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
+            ->where('type', $type)
             ->where("name->{$locale}", $name)
             ->first();
 
@@ -166,10 +166,13 @@ class Tag extends Model
         $type = self::resolveType($type);
         $locale = self::resolveLocale($locale);
 
-        // 1 query: batch find all existing active tags
+        // Deduplicate names to avoid creating duplicate tags for repeated inputs
+        $names = array_values(array_unique($names));
+
+        // 1 query: batch find all existing active tags with an exact type match
         $existing = static::query()
             ->where('is_active', true)
-            ->when($type !== null, fn (Builder $q) => $q->where('type', $type))
+            ->where('type', $type)
             ->whereIn("name->{$locale}", $names)
             ->get()
             ->keyBy(fn (self $tag) => $tag->getTranslatedName($locale));
